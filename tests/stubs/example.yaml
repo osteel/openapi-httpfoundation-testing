@@ -1,0 +1,53 @@
+openapi: 3.0.3
+
+info:
+  title: HttpFoundation OpenAPI Validator Example
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8000/api
+
+paths:
+  '/test':
+    get:
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                    - foo
+                properties:
+                  foo:
+                    type: string
+                    example: bar
+    post:
+      responses:
+        '204':
+          description: No content
+    put:
+      responses:
+        '204':
+          description: No content
+    patch:
+      responses:
+        '204':
+          description: No content
+    delete:
+      responses:
+        '204':
+          description: No content
+    head:
+      responses:
+        '204':
+          description: No content
+    options:
+      responses:
+        '204':
+          description: No content
+    trace:
+      responses:
+        '204':
+          description: No content

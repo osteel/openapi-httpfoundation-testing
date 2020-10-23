@@ -1,50 +1,108 @@
-# :package_name
+⚠️  **This package is under active development and not available for general use yet** ⚠️
 
-[![Latest Version on Packagist][ico-version]][link-packagist]
-[![Software License][ico-license]](LICENSE.md)
-[![Build Status][ico-travis]][link-travis]
-[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
-[![Quality Score][ico-code-quality]][link-code-quality]
-[![Total Downloads][ico-downloads]][link-downloads]
+# OpenAPI HttpFoundation Response Testing
 
-**Note:** Replace ```:author_name``` ```:author_username``` ```:author_website``` ```:author_email``` ```:vendor``` ```:package_name``` ```:package_description``` with their correct values in [README.md](README.md), [CHANGELOG.md](CHANGELOG.md), [CONTRIBUTING.md](CONTRIBUTING.md), [LICENSE.md](LICENSE.md) and [composer.json](composer.json) files, then delete this line. You can run `$ php prefill.php` in the command line to make all replacements at once. Delete the file prefill.php as well.
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/osteel/openapi-httpfoundation-testing.svg?style=flat-square)](https://packagist.org/packages/osteel/openapi-httpfoundation-testing)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://travis-ci.com/osteel/openapi-httpfoundation-testing.svg?token=SDx8eeySnDpzswpLVTU3&branch=main)](https://travis-ci.com/osteel/openapi-httpfoundation-testing)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/osteel/openapi-httpfoundation-testing/badges/quality-score.png?b=main&s=bef9ddbf29dac69612a3092e4761e14ce768bccd)](https://scrutinizer-ci.com/g/osteel/openapi-httpfoundation-testing/?branch=main)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what
-PSRs you support to avoid any confusion with users and contributors.
+Increase your API's robustness by validating your HttpFoundation responses against OpenAPI 3.0 definitions in your integration tests.
 
-## Structure
+## Why?
 
-If any of the following are applicable to your project, then the directory structure should follow industry best practices by being named the following.
+[OpenAPI](https://swagger.io/specification/) is a specification intended to describe RESTful APIs built with any language, for the API to be understood by humans and machines alike.
 
-```
-bin/        
-build/
-docs/
-config/
-src/
-tests/
-vendor/
-```
+By validating HTTP responses against an OpenAPI definition, we ensure that the API's behaviour conforms to the documentation we provide (the OpenAPI definitions), thus making that documentation the API's single source of truth.
 
+The [HttpFoundation component](https://symfony.com/doc/current/components/http_foundation.html) is developed and maintained as part of the [Symfony framework](https://symfony.com/), and is used to handle HTTP requests and responses in Symfony, Laravel, Drupal, PrestaShop, and other major industry players (see the [extended list](https://symfony.com/components/HttpFoundation)).
+
+## How does it work?
+
+This package is built upon the [OpenAPI PSR-7 Message Validator](https://github.com/thephpleague/openapi-psr7-validator) package, which validates [PSR-7 messages](https://www.php-fig.org/psr/psr-7/) against OpenAPI definitions.
+
+It essentially converts HttpFoundation response objects to PSR-7 messages using Symfony's [PSR-7 Bridge](https://symfony.com/doc/current/components/psr7.html), before passing them on to the OpenAPI PSR-7 Message Validator. It also exposes an interface to make it easy to validate responses (see [Usage](#usage) below).
 
 ## Install
 
-Via Composer
+Via Composer:
 
 ``` bash
-$ composer require :vendor/:package_name
+$ composer require --dev osteel/openapi-httpfoundation-testing
 ```
+
+> 💡 This package is meant to be used for development only, as part of your test suite.
 
 ## Usage
 
-``` php
-$skeleton = new League\Skeleton();
-echo $skeleton->echoPhrase('Hello, League!');
+### General
+
+First, create a `Osteel\OpenApi\Testing\ResponseValidator` object using a YAML or JSON OpenAPI definition:
+
+```php
+$validator = new \Osteel\OpenApi\Testing\ResponseValidatorBuilder::fromYaml('my-definition.yaml')->getValidator();
+
+// ... or...
+
+$validator = new \Osteel\OpenApi\Testing\ResponseValidatorBuilder::fromJson('my-definition.json')->getValidator();
 ```
+
+> 💡 Instead of a file, you can also pass a YAML or JSON string directly.
+
+You can now validate your `Symfony\Component\HttpFoundation\Response` object for a given [path](https://swagger.io/specification/#paths-object) and method:
+
+```php
+$validator->validate('/users', 'post', $response);
+```
+
+> 💡 For convenience, responses implementing the `Psr\Http\Message\ResponseInterface` interface are also accepted.
+
+In the example above, we check that the response matches the OpenAPI definition for a `POST` request on the `/users` path.
+
+The `validate` method will return `true` in case of success, and throw an exception otherwise (see [below](#exceptions)).
+
+There is an available shortcut for each of OpenAPI's supported HTTP methods (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, `OPTIONS` and `TRACE`), meaning the line above could also be written this way:
+
+```php
+$validator->post('/users', $response);
+```
+
+### Trait
+
+In order to use the package in a less verbose way, the `ValidatesHttpFoundationResponses` trait can be imported in the class that will perform the validation:
+
+```php
+<?php
+
+use Osteel\OpenApi\Testing\HttpFoundation\ValidatesHttpFoundationResponses;
+
+class ExampleTest
+{
+    use ValidatesHttpFoundationResponses;
+
+    public function testItValidatesTheResponse()
+    {
+        // Query the API to obtain a Symfony\Component\HttpFoundation\Response object.
+        $response = $this->get('/api/users');
+
+        // Make sure the response matches the OpenAPI definition
+        $this->yamlValidator('my-definition.yaml')->get('/users', $response);
+
+        // ... or...
+        $this->jsonValidator('my-definition.json')->get('/users', $response);
+    }
+}
+```
+
+Both methods will return an instance of `Osteel\OpenApi\Testing\ResponseValidator` based on the provided definition; you can then use that object as described in the previous section.
+
+### Exceptions
+
+In case of error, the `validate` method will throw [PSR-7 message-related exceptions](https://github.com/thephpleague/openapi-psr7-validator#exceptions) from the underlying OpenAPI PSR-7 Message Validator package.
 
 ## Change log
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+Please see the [Releases section](../../releases) for more information on what has changed recently.
 
 ## Testing
 
@@ -58,28 +116,17 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) and [CODE_OF_CONDUCT](CODE_OF_CONDUCT
 
 ## Security
 
-If you discover any security related issues, please email :author_email instead of using the issue tracker.
+If you discover any security related issues, please email hello@yannickchenot.com instead of using the issue tracker.
 
 ## Credits
 
-- [:author_name][link-author]
-- [All Contributors][link-contributors]
+- [Yannick Chenot](https://github.com/osteel)
+- [All Contributors](../../contributors)
+- [OpenAPI PSR-7 Message Validator](https://github.com/thephpleague/openapi-psr7-validator)
+- [The PSR-7 Bridge](https://symfony.com/doc/current/components/psr7.html)
+
+Special thanks to [Pavel Batanov](https://github.com/scaytrase) for his advice on structuring the package.
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-[ico-version]: https://img.shields.io/packagist/v/:vendor/:package_name.svg?style=flat-square
-[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/:vendor/:package_name/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/:vendor/:package_name.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/:vendor/:package_name.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/:vendor/:package_name.svg?style=flat-square
-
-[link-packagist]: https://packagist.org/packages/:vendor/:package_name
-[link-travis]: https://travis-ci.org/:vendor/:package_name
-[link-scrutinizer]: https://scrutinizer-ci.com/g/:vendor/:package_name/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/:vendor/:package_name
-[link-downloads]: https://packagist.org/packages/:vendor/:package_name
-[link-author]: https://github.com/:author_username
-[link-contributors]: ../../contributors
