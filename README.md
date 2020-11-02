@@ -35,21 +35,25 @@ $ composer require --dev osteel/openapi-httpfoundation-testing
 
 ## Usage
 
-### General
-
-First, create a `Osteel\OpenApi\Testing\ResponseValidator` object using a YAML or JSON OpenAPI definition:
+First, import the builder in the class that will perform the validation:
 
 ```php
-$validator = new \Osteel\OpenApi\Testing\ResponseValidatorBuilder::fromYaml('my-definition.yaml')->getValidator();
+use Osteel\OpenApi\Testing\ResponseValidatorBuilder;
+```
 
-// ... or...
+Use the builder to create a `Osteel\OpenApi\Testing\ResponseValidator` object, feeding it a YAML or JSON OpenAPI definition:
 
-$validator = new \Osteel\OpenApi\Testing\ResponseValidatorBuilder::fromJson('my-definition.json')->getValidator();
+```php
+$validator = ResponseValidatorBuilder::fromYaml('my-definition.yaml')->getValidator();
+
+// or
+
+$validator = ResponseValidatorBuilder::fromJson('my-definition.json')->getValidator();
 ```
 
 > 💡 Instead of a file, you can also pass a YAML or JSON string directly.
 
-You can now validate your `Symfony\Component\HttpFoundation\Response` object for a given [path](https://swagger.io/specification/#paths-object) and method:
+You can now validate a `Symfony\Component\HttpFoundation\Response` object for a valid [path](https://swagger.io/specification/#paths-object) and method:
 
 ```php
 $validator->validate('/users', 'post', $response);
@@ -59,46 +63,13 @@ $validator->validate('/users', 'post', $response);
 
 In the example above, we check that the response matches the OpenAPI definition for a `POST` request on the `/users` path.
 
-The `validate` method will return `true` in case of success, and throw an exception otherwise (see [below](#exceptions)).
-
-There is an available shortcut for each of OpenAPI's supported HTTP methods (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, `OPTIONS` and `TRACE`), meaning the line above could also be written this way:
+Each of OpenAPI's supported HTTP methods (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`, `HEAD`, `OPTIONS` and `TRACE`) also has a shortcut method that calls `validate` under the hood, meaning the line above could also be written this way:
 
 ```php
 $validator->post('/users', $response);
 ```
 
-### Trait
-
-In order to use the package in a less verbose way, the `ValidatesHttpFoundationResponses` trait can be imported in the class that will perform the validation:
-
-```php
-<?php
-
-use Osteel\OpenApi\Testing\HttpFoundation\ValidatesHttpFoundationResponses;
-
-class ExampleTest
-{
-    use ValidatesHttpFoundationResponses;
-
-    public function testItValidatesTheResponse()
-    {
-        // Query the API to obtain a Symfony\Component\HttpFoundation\Response object.
-        $response = $this->get('/api/users');
-
-        // Make sure the response matches the OpenAPI definition
-        $this->yamlValidator('my-definition.yaml')->get('/users', $response);
-
-        // ... or...
-        $this->jsonValidator('my-definition.json')->get('/users', $response);
-    }
-}
-```
-
-Both methods will return an instance of `Osteel\OpenApi\Testing\ResponseValidator` based on the provided definition; you can then use that object as described in the previous section.
-
-### Exceptions
-
-In case of error, the `validate` method will throw [PSR-7 message-related exceptions](https://github.com/thephpleague/openapi-psr7-validator#exceptions) from the underlying OpenAPI PSR-7 Message Validator package.
+The `validate` method returns `true` in case of success, and throws [PSR-7 message-related exceptions](https://github.com/thephpleague/openapi-psr7-validator#exceptions) from the underlying OpenAPI PSR-7 Message Validator package in case of error.
 
 ## Change log
 
@@ -113,10 +84,6 @@ $ composer test
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) and [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) for details.
-
-## Security
-
-If you discover any security related issues, please email hello@yannickchenot.com instead of using the issue tracker.
 
 ## Credits
 
