@@ -1,5 +1,3 @@
-⚠️  **This package is under active development and not available for general use yet** ⚠️
-
 # OpenAPI HttpFoundation Response Testing
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/osteel/openapi-httpfoundation-testing.svg?style=flat-square)](https://packagist.org/packages/osteel/openapi-httpfoundation-testing)
@@ -13,15 +11,15 @@ Increase your API's robustness by validating your HttpFoundation responses again
 
 [OpenAPI](https://swagger.io/specification/) is a specification intended to describe RESTful APIs built with any language, for the API to be understood by humans and machines alike.
 
-By validating HTTP responses against an OpenAPI definition, we ensure that the API's behaviour conforms to the documentation we provide (the OpenAPI definitions), thus making that documentation the API's single source of truth.
+Validating HTTP responses against an OpenAPI definition makes it the single source of truth for our API, as we ensure that the API's behaviour conforms to the documentation we provide.
 
-The [HttpFoundation component](https://symfony.com/doc/current/components/http_foundation.html) is developed and maintained as part of the [Symfony framework](https://symfony.com/), and is used to handle HTTP requests and responses in Symfony, Laravel, Drupal, PrestaShop, and other major industry players (see the [extended list](https://symfony.com/components/HttpFoundation)).
+The [HttpFoundation component](https://symfony.com/doc/current/components/http_foundation.html) is developed and maintained as part of the [Symfony framework](https://symfony.com/), and is used to handle HTTP requests and responses in Symfony, Laravel, Drupal, and many other major industry players (see the [extended list](https://symfony.com/components/HttpFoundation)).
 
 ## How does it work?
 
 This package is built upon the [OpenAPI PSR-7 Message Validator](https://github.com/thephpleague/openapi-psr7-validator) package, which validates [PSR-7 messages](https://www.php-fig.org/psr/psr-7/) against OpenAPI definitions.
 
-It essentially converts HttpFoundation response objects to PSR-7 messages using Symfony's [PSR-7 Bridge](https://symfony.com/doc/current/components/psr7.html), before passing them on to the OpenAPI PSR-7 Message Validator. It also exposes an interface to make it easy to validate responses (see [Usage](#usage) below).
+It essentially converts HttpFoundation response objects to PSR-7 messages using Symfony's [PSR-7 Bridge](https://symfony.com/doc/current/components/psr7.html), before passing them on to the OpenAPI PSR-7 Message Validator.
 
 ## Install
 
@@ -53,13 +51,13 @@ $validator = ResponseValidatorBuilder::fromJson('my-definition.json')->getValida
 
 > 💡 Instead of a file, you can also pass a YAML or JSON string directly.
 
-You can now validate a `Symfony\Component\HttpFoundation\Response` object for a valid [path](https://swagger.io/specification/#paths-object) and method:
+You can now validate a `Symfony\Component\HttpFoundation\Response` object for a given [path](https://swagger.io/specification/#paths-object) and method:
 
 ```php
 $validator->validate('/users', 'post', $response);
 ```
 
-> 💡 For convenience, responses implementing the `Psr\Http\Message\ResponseInterface` interface are also accepted.
+> 💡 For convenience, responses implementing `Psr\Http\Message\ResponseInterface` are also accepted.
 
 In the example above, we check that the response matches the OpenAPI definition for a `POST` request on the `/users` path.
 
