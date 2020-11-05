@@ -5,31 +5,31 @@
 [![Build Status](https://travis-ci.com/osteel/openapi-httpfoundation-testing.svg?token=SDx8eeySnDpzswpLVTU3&branch=main)](https://travis-ci.com/osteel/openapi-httpfoundation-testing)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/osteel/openapi-httpfoundation-testing/badges/quality-score.png?b=main&s=bef9ddbf29dac69612a3092e4761e14ce768bccd)](https://scrutinizer-ci.com/g/osteel/openapi-httpfoundation-testing/?branch=main)
 
-Increase your API's robustness by validating your HttpFoundation responses against OpenAPI 3.0 definitions in your integration tests.
+Strengthen your API tests by validating HttpFoundation responses against OpenAPI (3.0.x) definitions.
 
 ## Why?
 
-[OpenAPI](https://swagger.io/specification/) is a specification intended to describe RESTful APIs built with any language, for the API to be understood by humans and machines alike.
+[OpenAPI](https://swagger.io/specification/) is a specification intended to describe RESTful APIs in a way that is understood by humans and machines alike.
 
-Validating HTTP responses against an OpenAPI definition makes it the single source of truth for our API, as we ensure that the API's behaviour conforms to the documentation we provide.
+By validating an API's responses against the OpenAPI definition that describes it, we guarantee that the API's behaviour conforms to the documentation we provide, thus making the OpenAPI definition the single source of truth.
 
-The [HttpFoundation component](https://symfony.com/doc/current/components/http_foundation.html) is developed and maintained as part of the [Symfony framework](https://symfony.com/), and is used to handle HTTP requests and responses in Symfony, Laravel, Drupal, and many other major industry players (see the [extended list](https://symfony.com/components/HttpFoundation)).
+The [HttpFoundation component](https://symfony.com/doc/current/components/http_foundation.html) is developed and maintained as part of the [Symfony framework](https://symfony.com/). It is used to handle HTTP requests and responses in projects such as Symfony, Laravel, Drupal, and many other major industry players (see the [extended list](https://symfony.com/components/HttpFoundation)).
 
 ## How does it work?
 
 This package is built upon the [OpenAPI PSR-7 Message Validator](https://github.com/thephpleague/openapi-psr7-validator) package, which validates [PSR-7 messages](https://www.php-fig.org/psr/psr-7/) against OpenAPI definitions.
 
-It essentially converts HttpFoundation response objects to PSR-7 messages using Symfony's [PSR-7 Bridge](https://symfony.com/doc/current/components/psr7.html), before passing them on to the OpenAPI PSR-7 Message Validator.
+It essentially converts HttpFoundation response objects to PSR-7 messages using Symfony's [PSR-7 Bridge](https://symfony.com/doc/current/components/psr7.html) and [Tobias Nyholm](https://github.com/Nyholm)'s [PSR-7 implementation](https://github.com/Nyholm/psr7), before passing them on to the OpenAPI PSR-7 Message Validator.
 
 ## Install
 
 Via Composer:
 
-``` bash
+```bash
 $ composer require --dev osteel/openapi-httpfoundation-testing
 ```
 
-> 💡 This package is meant to be used for development only, as part of your test suite.
+> 💡 This package is meant to be used for development only, as part of your API test suite.
 
 ## Usage
 
@@ -75,7 +75,7 @@ Please see the [Releases section](../../releases) for more information on what h
 
 ## Testing
 
-``` bash
+```bash
 $ composer test
 ```
 
@@ -85,12 +85,18 @@ Please see [CONTRIBUTING](CONTRIBUTING.md) and [CODE_OF_CONDUCT](CODE_OF_CONDUCT
 
 ## Credits
 
+**People**
+
 - [Yannick Chenot](https://github.com/osteel)
 - [All Contributors](../../contributors)
-- [OpenAPI PSR-7 Message Validator](https://github.com/thephpleague/openapi-psr7-validator)
-- [The PSR-7 Bridge](https://symfony.com/doc/current/components/psr7.html)
 
 Special thanks to [Pavel Batanov](https://github.com/scaytrase) for his advice on structuring the package.
+
+**Packages**
+
+- [OpenAPI PSR-7 Message Validator](https://github.com/thephpleague/openapi-psr7-validator)
+- [The PSR-7 Bridge](https://symfony.com/doc/current/components/psr7.html)
+- [PSR-7 implementation](https://github.com/Nyholm/psr7)
 
 ## License
 

@@ -1,7 +1,7 @@
 {
     "name": "osteel/openapi-httpfoundation-testing",
     "type": "library",
-    "description": "Validate HttpFoundation responses against OpenAPI definitions",
+    "description": "Strengthen your API tests by validating HttpFoundation responses against OpenAPI (3.0.x) definitions",
     "keywords": [
         "openapi",
         "httpfoundation",
@@ -9,7 +9,8 @@
         "laravel",
         "http",
         "validation",
-        "testing"
+        "testing",
+        "api"
     ],
     "homepage": "https://github.com/osteel/openapi-httpfoundation-testing",
     "license": "MIT",
@@ -23,6 +24,7 @@
     ],
     "require": {
         "php": "^7.2",
+        "ext-json": "*",
         "league/openapi-psr7-validator": "^0.12.1",
         "nyholm/psr7": "^1.3",
         "psr/http-message": "^1.0",
