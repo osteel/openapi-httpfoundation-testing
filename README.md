@@ -31,7 +31,7 @@ Via Composer:
 $ composer require --dev osteel/openapi-httpfoundation-testing
 ```
 
-> 💡 This package is meant to be used for development only, as part of your API test suite.
+💡 _This package is meant to be used for development only, as part of your API test suite._
 
 ## Usage
 
@@ -41,7 +41,7 @@ First, import the builder in the class that will perform the validation:
 use Osteel\OpenApi\Testing\ResponseValidatorBuilder;
 ```
 
-Use the builder to create a `Osteel\OpenApi\Testing\ResponseValidator` object, feeding it a YAML or JSON OpenAPI definition:
+Use the builder to create a `\Osteel\OpenApi\Testing\ResponseValidator` object, feeding it a YAML or JSON OpenAPI definition:
 
 ```php
 $validator = ResponseValidatorBuilder::fromYaml('my-definition.yaml')->getValidator();
@@ -51,15 +51,15 @@ $validator = ResponseValidatorBuilder::fromYaml('my-definition.yaml')->getValida
 $validator = ResponseValidatorBuilder::fromJson('my-definition.json')->getValidator();
 ```
 
-> 💡 Instead of a file, you can also pass a YAML or JSON string directly.
+💡 _Instead of a file, you can also pass a YAML or JSON string directly._
 
-You can now validate a `Symfony\Component\HttpFoundation\Response` object for a given [path](https://swagger.io/specification/#paths-object) and method:
+You can now validate a `\Symfony\Component\HttpFoundation\Response` object for a given [path](https://swagger.io/specification/#paths-object) and method:
 
 ```php
 $validator->validate('/users', 'post', $response);
 ```
 
-> 💡 For convenience, responses implementing `Psr\Http\Message\ResponseInterface` are also accepted.
+💡 _For convenience, responses implementing `\Psr\Http\Message\ResponseInterface` are also accepted._
 
 In the example above, we check that the response matches the OpenAPI definition for a `POST` request on the `/users` path.
 
@@ -69,7 +69,7 @@ Each of OpenAPI's supported HTTP methods (`GET`, `POST`, `PUT`, `PATCH`, `DELETE
 $validator->post('/users', $response);
 ```
 
-The `validate` method returns `true` in case of success, and throws [PSR-7 message-related exceptions](https://github.com/thephpleague/openapi-psr7-validator#exceptions) from the underlying OpenAPI PSR-7 Message Validator package in case of error.
+The `validate` method returns `true` in case of success, and throws `\Osteel\OpenApi\Testing\Exceptions\ValidationException` exceptions in case of error.
 
 ## Change log
 

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Osteel\OpenApi\Testing;
 
-use InvalidArgumentException;
+use League\OpenAPIValidation\PSR7\Exception\ValidationFailed;
 use League\OpenAPIValidation\PSR7\OperationAddress;
 use League\OpenAPIValidation\PSR7\ResponseValidator as BaseResponseValidator;
+use Osteel\OpenApi\Testing\Exceptions\ValidationException;
 
 /**
  * This class is a wrapper for League\OpenAPIValidation\PSR7\ResponseValidator objects,
@@ -44,8 +45,7 @@ final class ResponseValidator
      * @param  string $method   The HTTP method.
      * @param  object $response The response object to validate.
      * @return bool
-     * @throws InvalidArgumentException
-     * @throws \League\OpenAPIValidation\PSR7\Exception\ValidationFailed
+     * @throws ValidationException
      */
     public function validate(string $path, string $method, object $response): bool
     {
@@ -54,7 +54,11 @@ final class ResponseValidator
 
         $operation = new OperationAddress($path, strtolower($method));
 
-        $this->validator->validate($operation, $this->adapter->convert($response));
+        try {
+            $this->validator->validate($operation, $this->adapter->convert($response));
+        } catch (ValidationFailed $exception) {
+            throw ValidationException::fromValidationFailed($exception);
+        }
 
         return true;
     }

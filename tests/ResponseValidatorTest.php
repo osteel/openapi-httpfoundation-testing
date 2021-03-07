@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Osteel\OpenApi\Testing\Tests;
 
+use Osteel\OpenApi\Testing\Exceptions\ValidationException;
 use Osteel\OpenApi\Testing\ResponseValidator;
 use Osteel\OpenApi\Testing\ResponseValidatorBuilder;
 
@@ -23,7 +24,7 @@ class ResponseValidatorTest extends TestCase
 
     public function testItDoesNotValidateTheHttpFoundationResponse()
     {
-        $this->expectException(\League\OpenAPIValidation\PSR7\Exception\ValidationFailed::class);
+        $this->expectException(ValidationException::class);
 
         $this->sut->validate('/test', 'get', $this->httpFoundationResponse(['baz' => 'bar']));
     }
@@ -37,7 +38,7 @@ class ResponseValidatorTest extends TestCase
 
     public function testItDoesNotValidateThePsr7MessageResponse()
     {
-        $this->expectException(\League\OpenAPIValidation\PSR7\Exception\ValidationFailed::class);
+        $this->expectException(ValidationException::class);
 
         $this->sut->validate('/test', 'get', $this->psr7Response(['baz' => 'bar']));
     }
