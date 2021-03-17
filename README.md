@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.com/osteel/openapi-httpfoundation-testing.svg?token=SDx8eeySnDpzswpLVTU3&branch=main)](https://travis-ci.com/osteel/openapi-httpfoundation-testing)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/osteel/openapi-httpfoundation-testing/badges/quality-score.png?b=main&s=bef9ddbf29dac69612a3092e4761e14ce768bccd)](https://scrutinizer-ci.com/g/osteel/openapi-httpfoundation-testing/?branch=main)
 
-Strengthen your API tests by validating HttpFoundation responses against OpenAPI (3.0.x) definitions.
+Strengthen your API tests by validating HttpFoundation requests and responses against OpenAPI (3.0.x) definitions.
 
 See [this article](https://tech.osteel.me/posts/openapi-backed-api-testing-in-php-projects-a-laravel-example "OpenAPI-backed API testing in PHP projects – a Laravel example") for more details, and [this repository](https://github.com/osteel/openapi-httpfoundation-testing-laravel-example) for an example use in a Laravel project.
 
@@ -13,7 +13,7 @@ See [this article](https://tech.osteel.me/posts/openapi-backed-api-testing-in-ph
 
 [OpenAPI](https://swagger.io/specification/) is a specification intended to describe RESTful APIs in a way that is understood by humans and machines alike.
 
-By validating an API's responses against the OpenAPI definition that describes it, we guarantee that the API's behaviour conforms to the documentation we provide, thus making the OpenAPI definition the single source of truth.
+By validating an API's responses against the OpenAPI definition that describes it, we guarantee that the API's behaviour conforms to the documentation we provide, thus making the OpenAPI definition the single source of truth. The request validation on the other hand supports you in the process of doing the server side validation of the requests payloads. 
 
 The [HttpFoundation component](https://symfony.com/doc/current/components/http_foundation.html) is developed and maintained as part of the [Symfony framework](https://symfony.com/). It is used to handle HTTP requests and responses in projects such as Symfony, Laravel, Drupal, and many other major industry players (see the [extended list](https://symfony.com/components/HttpFoundation)).
 
@@ -21,7 +21,7 @@ The [HttpFoundation component](https://symfony.com/doc/current/components/http_f
 
 This package is built upon the [OpenAPI PSR-7 Message Validator](https://github.com/thephpleague/openapi-psr7-validator) package, which validates [PSR-7 messages](https://www.php-fig.org/psr/psr-7/) against OpenAPI definitions.
 
-It essentially converts HttpFoundation response objects to PSR-7 messages using Symfony's [PSR-7 Bridge](https://symfony.com/doc/current/components/psr7.html) and [Tobias Nyholm](https://github.com/Nyholm)'s [PSR-7 implementation](https://github.com/Nyholm/psr7), before passing them on to the OpenAPI PSR-7 Message Validator.
+It essentially converts HttpFoundation response and request objects to PSR-7 messages using Symfony's [PSR-7 Bridge](https://symfony.com/doc/current/components/psr7.html) and [Tobias Nyholm](https://github.com/Nyholm)'s [PSR-7 implementation](https://github.com/Nyholm/psr7), before passing them on to the OpenAPI PSR-7 Message Validators.
 
 ## Install
 
@@ -35,6 +35,7 @@ $ composer require --dev osteel/openapi-httpfoundation-testing
 
 ## Usage
 
+### Response Validation
 First, import the builder in the class that will perform the validation:
 
 ```php
@@ -68,6 +69,35 @@ Each of OpenAPI's supported HTTP methods (`GET`, `POST`, `PUT`, `PATCH`, `DELETE
 ```php
 $validator->post('/users', $response);
 ```
+
+The `validate` method returns `true` in case of success, and throws `\Osteel\OpenApi\Testing\Exceptions\ValidationException` exceptions in case of error.
+
+### Request Validation
+The procedure is the same as described in the [Response Validation](https://github.com/osteel/openapi-httpfoundation-testing#response-validation) section. Import the builder first: 
+
+```php
+use Osteel\OpenApi\Testing\RequestValidatorBuilder;
+```
+
+and use it to create a `\Osteel\OpenApi\Testing\RequestValidator` object, feeding it a YAML or JSON OpenAPI definition:
+
+```php
+$validator = RequestValidatorBuilder::fromYaml('my-definition.yaml')->getValidator();
+
+// or
+
+$validator = RequestValidatorBuilder::fromJson('my-definition.json')->getValidator();
+```
+
+💡 _Instead of a file, you can also pass a YAML or JSON string directly._
+
+You can now validate a `\Symfony\Component\HttpFoundation\Request` object:
+
+```php
+$validator->validate($request);
+```
+
+💡 _For convenience, requests implementing `\Psr\Http\Message\ServerRequestInterface` are also accepted._
 
 The `validate` method returns `true` in case of success, and throws `\Osteel\OpenApi\Testing\Exceptions\ValidationException` exceptions in case of error.
 

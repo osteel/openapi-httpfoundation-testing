@@ -35,6 +35,23 @@
         }
       },
       "post": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "foo": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "foo"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "204": {
             "description": "No content"
@@ -42,6 +59,23 @@
         }
       },
       "put": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "foo": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "foo"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "204": {
             "description": "No content"
@@ -49,6 +83,23 @@
         }
       },
       "patch": {
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "foo": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "foo"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "204": {
             "description": "No content"
