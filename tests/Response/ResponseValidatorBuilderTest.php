@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Osteel\OpenApi\Testing\Tests;
 
 use InvalidArgumentException;
-use Osteel\OpenApi\Testing\ResponseAdapter;
-use Osteel\OpenApi\Testing\ResponseValidator;
-use Osteel\OpenApi\Testing\ResponseValidatorBuilder;
+use Osteel\OpenApi\Testing\Response\Adapters\ResponseAdapterInterface;
+use Osteel\OpenApi\Testing\Response\ResponseValidator;
+use Osteel\OpenApi\Testing\Response\ResponseValidatorBuilder;
+use Osteel\OpenApi\Testing\Tests\TestCase;
 
 class ResponseValidatorBuilderTest extends TestCase
 {
@@ -31,7 +32,7 @@ class ResponseValidatorBuilderTest extends TestCase
         $this->assertInstanceOf(ResponseValidator::class, $result);
 
         // Validate a response to make sure the definition was correctly parsed.
-        $this->assertTrue($result->get('/test', $this->httpFoundationResponse(['foo' => 'bar'])));
+        $this->assertTrue($result->get($this->httpFoundationResponse(['foo' => 'bar']), '/test'));
     }
 
     public function testItDoesNotSetTheAdapterBecauseItsTypeIsInvalid()
@@ -40,7 +41,7 @@ class ResponseValidatorBuilderTest extends TestCase
         $this->expectExceptionMessage(sprintf(
             'Class %s does not implement the %s interface',
             InvalidArgumentException::class,
-            ResponseAdapter::class
+            ResponseAdapterInterface::class
         ));
 
         ResponseValidatorBuilder::fromYaml(self::$yamlDefinition)
@@ -50,7 +51,7 @@ class ResponseValidatorBuilderTest extends TestCase
     public function testItSetsTheAdapter()
     {
         ResponseValidatorBuilder::fromYaml(self::$yamlDefinition)
-            ->setAdapter(get_class($this->createMock(ResponseAdapter::class)));
+            ->setAdapter(get_class($this->createMock(ResponseAdapterInterface::class)));
 
         // No exception means the test was successful.
         $this->assertTrue(true);

@@ -2,37 +2,39 @@
 
 declare(strict_types=1);
 
-namespace Osteel\OpenApi\Testing;
+namespace Osteel\OpenApi\Testing\Response;
 
 use League\OpenAPIValidation\PSR7\Exception\ValidationFailed;
 use League\OpenAPIValidation\PSR7\OperationAddress;
 use League\OpenAPIValidation\PSR7\ResponseValidator as BaseResponseValidator;
 use Osteel\OpenApi\Testing\Exceptions\ValidationException;
+use Osteel\OpenApi\Testing\Response\Adapters\ResponseAdapterInterface;
+use Osteel\OpenApi\Testing\ValidatorInterface;
 
 /**
  * This class is a wrapper for League\OpenAPIValidation\PSR7\ResponseValidator objects,
  * providing an interface to validate HTTP responses against an OpenAPI definition.
  */
-final class ResponseValidator
+final class ResponseValidator implements ValidatorInterface
 {
     /**
-     * @var \League\OpenAPIValidation\PSR7\ResponseValidator
+     * @var BaseResponseValidator
      */
     private $validator;
 
     /**
-     * @var ResponseAdapter
+     * @var ResponseAdapterInterface
      */
     private $adapter;
 
     /**
      * Constructor.
      *
-     * @param  \League\OpenAPIValidation\PSR7\ResponseValidator $validator
-     * @param  ResponseAdapter                                  $adapter
+     * @param  BaseResponseValidator    $validator
+     * @param  ResponseAdapterInterface $adapter
      * @return void
      */
-    public function __construct(BaseResponseValidator $validator, ResponseAdapter $adapter)
+    public function __construct(BaseResponseValidator $validator, ResponseAdapterInterface $adapter)
     {
         $this->validator = $validator;
         $this->adapter   = $adapter;
@@ -41,13 +43,13 @@ final class ResponseValidator
     /**
      * Validate a response against the specified OpenAPI definition.
      *
+     * @param  object $response The response object to validate.
      * @param  string $path     The OpenAPI path.
      * @param  string $method   The HTTP method.
-     * @param  object $response The response object to validate.
      * @return bool
      * @throws ValidationException
      */
-    public function validate(string $path, string $method, object $response): bool
+    public function validate(object $response, string $path, string $method): bool
     {
         // Make sure the path begins with a forward slash.
         $path = sprintf('/%s', ltrim($path, '/'));
@@ -66,104 +68,104 @@ final class ResponseValidator
     /**
      * Validate a response to a GET request on the provided OpenAPI definition path.
      *
-     * @param  string $path     The OpenAPI path.
      * @param  object $response The response object to validate.
+     * @param  string $path     The OpenAPI path.
      * @return boolean
-     * @throws \League\OpenAPIValidation\PSR7\Exception\ValidationFailed
+     * @throws ValidationFailed
      */
-    public function get(string $path, object $response): bool
+    public function get(object $response, string $path): bool
     {
-        return $this->validate($path, 'get', $response);
+        return $this->validate($response, $path, 'get');
     }
 
     /**
      * Validate a response to a POST request on the provided OpenAPI definition path.
      *
-     * @param  string $path     The OpenAPI path.
      * @param  object $response The response object to validate.
+     * @param  string $path     The OpenAPI path.
      * @return boolean
-     * @throws \League\OpenAPIValidation\PSR7\Exception\ValidationFailed
+     * @throws ValidationFailed
      */
-    public function post(string $path, object $response): bool
+    public function post(object $response, string $path): bool
     {
-        return $this->validate($path, 'post', $response);
+        return $this->validate($response, $path, 'post');
     }
 
     /**
      * Validate a response to a PUT request on the provided OpenAPI definition path.
      *
-     * @param  string $path     The OpenAPI path.
      * @param  object $response The response object to validate.
+     * @param  string $path     The OpenAPI path.
      * @return boolean
-     * @throws \League\OpenAPIValidation\PSR7\Exception\ValidationFailed
+     * @throws ValidationFailed
      */
-    public function put(string $path, object $response): bool
+    public function put(object $response, string $path): bool
     {
-        return $this->validate($path, 'put', $response);
+        return $this->validate($response, $path, 'put');
     }
 
     /**
      * Validate a response to a PATCH request on the provided OpenAPI definition path.
      *
-     * @param  string $path     The OpenAPI path.
      * @param  object $response The response object to validate.
+     * @param  string $path     The OpenAPI path.
      * @return boolean
-     * @throws \League\OpenAPIValidation\PSR7\Exception\ValidationFailed
+     * @throws ValidationFailed
      */
-    public function patch(string $path, object $response): bool
+    public function patch(object $response, string $path): bool
     {
-        return $this->validate($path, 'patch', $response);
+        return $this->validate($response, $path, 'patch');
     }
 
     /**
      * Validate a response to a DELETE request on the provided OpenAPI definition path.
      *
-     * @param  string $path     The OpenAPI path.
      * @param  object $response The response object to validate.
+     * @param  string $path     The OpenAPI path.
      * @return boolean
-     * @throws \League\OpenAPIValidation\PSR7\Exception\ValidationFailed
+     * @throws ValidationFailed
      */
-    public function delete(string $path, object $response): bool
+    public function delete(object $response, string $path): bool
     {
-        return $this->validate($path, 'delete', $response);
+        return $this->validate($response, $path, 'delete');
     }
 
     /**
      * Validate a response to a HEAD request on the provided OpenAPI definition path.
      *
-     * @param  string $path     The OpenAPI path.
      * @param  object $response The response object to validate.
+     * @param  string $path     The OpenAPI path.
      * @return boolean
-     * @throws \League\OpenAPIValidation\PSR7\Exception\ValidationFailed
+     * @throws ValidationFailed
      */
-    public function head(string $path, object $response): bool
+    public function head(object $response, string $path): bool
     {
-        return $this->validate($path, 'head', $response);
+        return $this->validate($response, $path, 'head');
     }
 
     /**
      * Validate a response to a OPTIONS request on the provided OpenAPI definition path.
      *
-     * @param  string $path     The OpenAPI path.
      * @param  object $response The response object to validate.
+     * @param  string $path     The OpenAPI path.
      * @return boolean
-     * @throws \League\OpenAPIValidation\PSR7\Exception\ValidationFailed
+     * @throws ValidationFailed
      */
-    public function options(string $path, object $response): bool
+    public function options(object $response, string $path): bool
     {
-        return $this->validate($path, 'options', $response);
+        return $this->validate($response, $path, 'options');
     }
 
     /**
      * Validate a response to a TRACE request on the provided OpenAPI definition path.
      *
-     * @param  string $path     The OpenAPI path.
      * @param  object $response The response object to validate.
+     * @param  string $path     The OpenAPI path.
      * @return boolean
-     * @throws \League\OpenAPIValidation\PSR7\Exception\ValidationFailed
+     * @throws ValidationFailed
      */
-    public function trace(string $path, object $response): bool
+    public function trace(object $response, string $path): bool
     {
-        return $this->validate($path, 'trace', $response);
+        return $this->validate($response, $path, 'trace');
     }
 }

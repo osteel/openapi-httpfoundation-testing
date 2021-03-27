@@ -1,7 +1,7 @@
 {
     "name": "osteel/openapi-httpfoundation-testing",
     "type": "library",
-    "description": "Strengthen your API tests by validating HttpFoundation requests and responses against OpenAPI (3.0.x) definitions",
+    "description": "Validate HttpFoundation requests and responses against OpenAPI (3.0.x) definitions",
     "keywords": [
         "openapi",
         "httpfoundation",

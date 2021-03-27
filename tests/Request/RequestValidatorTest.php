@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Osteel\OpenApi\Testing\Tests;
+namespace Osteel\OpenApi\Testing\Tests\Request;
 
 use Osteel\OpenApi\Testing\Exceptions\ValidationException;
-use Osteel\OpenApi\Testing\RequestValidator;
-use Osteel\OpenApi\Testing\RequestValidatorBuilder;
+use Osteel\OpenApi\Testing\Request\RequestValidator;
+use Osteel\OpenApi\Testing\Request\RequestValidatorBuilder;
+use Osteel\OpenApi\Testing\Tests\TestCase;
 
 class RequestValidatorTest extends TestCase
 {

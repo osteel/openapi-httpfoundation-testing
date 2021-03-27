@@ -3,7 +3,7 @@
 namespace Osteel\OpenApi\Testing\Tests\HttpFoundation;
 
 use InvalidArgumentException;
-use Osteel\OpenApi\Testing\HttpFoundation\HttpFoundationResponseAdapter;
+use Osteel\OpenApi\Testing\Response\Adapters\HttpFoundationResponseAdapter;
 use Osteel\OpenApi\Testing\Tests\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Response;
