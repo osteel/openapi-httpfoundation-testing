@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Osteel\OpenApi\Testing\Tests;
+namespace Osteel\OpenApi\Testing\Tests\Request;
 
 use InvalidArgumentException;
-use Osteel\OpenApi\Testing\RequestAdapter;
-use Osteel\OpenApi\Testing\RequestValidator;
-use Osteel\OpenApi\Testing\RequestValidatorBuilder;
+use Osteel\OpenApi\Testing\Request\Adapters\RequestAdapterInterface;
+use Osteel\OpenApi\Testing\Request\RequestValidator;
+use Osteel\OpenApi\Testing\Request\RequestValidatorBuilder;
+use Osteel\OpenApi\Testing\Tests\TestCase;
 
 class RequestValidatorBuilderTest extends TestCase
 {
@@ -40,7 +41,7 @@ class RequestValidatorBuilderTest extends TestCase
         $this->expectExceptionMessage(sprintf(
             'Class %s does not implement the %s interface',
             InvalidArgumentException::class,
-            RequestAdapter::class
+            RequestAdapterInterface::class
         ));
 
         RequestValidatorBuilder::fromYaml(self::$yamlDefinition)
@@ -50,7 +51,7 @@ class RequestValidatorBuilderTest extends TestCase
     public function testItSetsTheAdapter()
     {
         RequestValidatorBuilder::fromYaml(self::$yamlDefinition)
-            ->setAdapter(get_class($this->createMock(RequestAdapter::class)));
+            ->setAdapter(get_class($this->createMock(RequestAdapterInterface::class)));
 
         // No exception means the test was successful.
         $this->assertTrue(true);

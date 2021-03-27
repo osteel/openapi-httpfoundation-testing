@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Osteel\OpenApi\Testing\HttpFoundation;
+namespace Osteel\OpenApi\Testing\Response\Adapters;
 
 use InvalidArgumentException;
 use Nyholm\Psr7\Factory\Psr17Factory;
-use Osteel\OpenApi\Testing\ResponseAdapter;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Response;
 
-class HttpFoundationResponseAdapter implements ResponseAdapter
+class HttpFoundationResponseAdapter implements ResponseAdapterInterface
 {
     /**
      * {@inheritDoc}

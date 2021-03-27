@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Osteel\OpenApi\Testing;
+namespace Osteel\OpenApi\Testing\Response\Adapters;
 
 use Psr\Http\Message\ResponseInterface;
 
-interface ResponseAdapter
+interface ResponseAdapterInterface
 {
     /**
      * Convert a response to a PSR-7 HTTP message.

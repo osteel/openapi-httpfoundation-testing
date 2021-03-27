@@ -2,21 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Osteel\OpenApi\Testing\HttpFoundation;
+namespace Osteel\OpenApi\Testing\Request\Adapters;
 
 use InvalidArgumentException;
 use Nyholm\Psr7\Factory\Psr17Factory;
-use Osteel\OpenApi\Testing\RequestAdapter;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Request;
 
-class HttpFoundationRequestAdapter implements RequestAdapter
+class HttpFoundationRequestAdapter implements RequestAdapterInterface
 {
     /**
      * {@inheritDoc}
      *
-     * @param  Request|ServerRequestInterface $request The request object to convert.
+     * @param  Request|ServerRequestInterface $message The request object to convert.
      * @return ServerRequestInterface
      * @throws InvalidArgumentException
      */

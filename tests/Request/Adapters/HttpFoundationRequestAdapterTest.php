@@ -1,9 +1,9 @@
 <?php
 
-namespace Osteel\OpenApi\Testing\Tests\HttpFoundation;
+namespace Osteel\OpenApi\Testing\Tests\Request\Adapters;
 
 use InvalidArgumentException;
-use Osteel\OpenApi\Testing\HttpFoundation\HttpFoundationRequestAdapter;
+use Osteel\OpenApi\Testing\Request\Adapters\HttpFoundationRequestAdapter;
 use Osteel\OpenApi\Testing\Tests\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Request;
