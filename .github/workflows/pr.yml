@@ -1,0 +1,32 @@
+name: Pull request analysis
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  analysis:
+    name: Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Analyze dependencies
+        uses: symfonycorp/security-checker-action@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          coverage: none
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v1
+        with:
+          composer-options: --prefer-dist --no-interaction
+
+      - name: Analyze code
+        run: ./vendor/bin/phpinsights -n --ansi --format=github-action
+        working-directory: ./src
