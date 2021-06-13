@@ -28,12 +28,4 @@ interface ValidatorBuilderInterface
      * @return ValidatorInterface
      */
     public function getValidator(): ValidatorInterface;
-
-    /**
-     * Change the adapter to use.
-     *
-     * @param  string $class The adapter's class.
-     * @return ValidatorBuilderInterface
-     */
-    public function setAdapter(string $class): ValidatorBuilderInterface;
 }
