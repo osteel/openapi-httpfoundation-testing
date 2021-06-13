@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     private const BASE_URI = 'http://localhost:8000/api';
+    protected const PATH   = '/test';
 
     /**
      * @var string
@@ -83,12 +84,14 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Return a PSR-7 server request with the provided content.
+     * Return a PSR-7 request with the provided content.
      *
-     * @param  array $content
+     * @param  string $uri
+     * @param  string $method
+     * @param  array  $content
      * @return ServerRequestInterface
      */
-    protected function psr7ServerRequest(
+    protected function psr7Request(
         string $uri,
         string $method,
         array $content = null
@@ -97,10 +100,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $uri          = $psr17Factory->createUri(self::BASE_URI . $uri);
         $stream       = $psr17Factory->createStream(json_encode($content));
         $request      = $psr17Factory->createServerRequest($method, $uri);
+
         if ($content) {
             $request = $request->withHeader('Content-Type', 'application/json');
         }
-
 
         return $request->withBody($stream);
     }
