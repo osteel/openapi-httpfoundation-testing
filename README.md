@@ -9,7 +9,7 @@ Validate HttpFoundation requests and responses against OpenAPI (3.0.x) definitio
 
 See [this article](https://tech.osteel.me/posts/openapi-backed-api-testing-in-php-projects-a-laravel-example "OpenAPI-backed API testing in PHP projects – a Laravel example") for more details, and [this repository](https://github.com/osteel/openapi-httpfoundation-testing-laravel-example) for an example use in a Laravel project.
 
-⚠️ _This package is still under active development. While you can safely use it for your projects, as long as version `1.0` has not been released "minor" version patches can and will contain breaking changes. Make sure to check the [release section](../../releases) before you upgrade._
+💡 _While you can safely use this package for your projects, as long as version `1.0` has not been released "minor" version patches can contain breaking changes. Make sure to check the [release section](../../releases) before you upgrade._
 
 ## Why?
 
