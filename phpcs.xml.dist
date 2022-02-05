@@ -9,6 +9,10 @@
     <arg name="colors" />
     <arg value="s" />
 
-    <!-- Use the PSR12 Standard-->
+    <!-- Use the PSR12 standard -->
     <rule ref="PSR12" />
+
+    <!-- Files and folders to analyse -->
+    <file>src</file>
+    <file>tests</file>
 </ruleset>
