@@ -24,6 +24,7 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         php-version:
           - "7.2"
@@ -31,10 +32,13 @@ jobs:
           - "7.4"
           - "8.0"
           - "8.1"
+        dependency-versions:
+          - "lowest"
+          - "highest"
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
@@ -43,7 +47,9 @@ jobs:
           coverage: none
 
       - name: Install Composer dependencies
-        uses: "ramsey/composer-install@v1"
+        uses: "ramsey/composer-install@v2"
+        with:
+          dependency-versions: ${{ matrix.dependency-versions }}
 
       - name: Run PHPUnit
         run: vendor/bin/phpunit tests
