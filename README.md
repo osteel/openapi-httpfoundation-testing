@@ -3,6 +3,7 @@
 [![Build Status](https://github.com/osteel/php-cli-demo/workflows/CI/badge.svg)](https://github.com/osteel/php-cli-demo/actions)
 [![Latest Stable Version](https://poser.pugx.org/osteel/openapi-httpfoundation-testing/v)](//packagist.org/packages/osteel/openapi-httpfoundation-testing)
 [![License](https://poser.pugx.org/osteel/openapi-httpfoundation-testing/license)](//packagist.org/packages/osteel/openapi-httpfoundation-testing)
+[![Downloads](http://poser.pugx.org/osteel/openapi-httpfoundation-testing/downloads)](//packagist.org/packages/osteel/openapi-httpfoundation-testing)
 
 Validate HttpFoundation requests and responses against OpenAPI (3.0.x) definitions.
 
