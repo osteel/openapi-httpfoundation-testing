@@ -47,6 +47,7 @@
     },
     "scripts": {
         "test": "phpunit",
+        "test-speed": "phpunit --filter ValidatorBuilderSpeedTest --repeat 10000",
         "check-style": "phpcs src tests",
         "fix-style": "phpcbf src tests"
     },

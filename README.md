@@ -1,4 +1,4 @@
-# OpenAPI HttpFoundation Testing
+    # OpenAPI HttpFoundation Testing
 
 [![Build Status](https://github.com/osteel/php-cli-demo/workflows/CI/badge.svg)](https://github.com/osteel/php-cli-demo/actions)
 [![Latest Stable Version](https://poser.pugx.org/osteel/openapi-httpfoundation-testing/v)](//packagist.org/packages/osteel/openapi-httpfoundation-testing)
@@ -53,7 +53,7 @@ $validator = ValidatorBuilder::fromYaml('my-definition.yaml')->getValidator();
 $validator = ValidatorBuilder::fromJson('my-definition.json')->getValidator();
 ```
 
-💡 _Instead of a file, you can also pass a YAML or JSON string directly._
+💡 _Instead of a file, you can also pass a YAML or JSON string directly into `fromJson` or `fromYaml`, or you can use `fromJsonRaw` or `fromYamlRaw`._
 
 You can now validate `\Symfony\Component\HttpFoundation\Request` and `\Symfony\Component\HttpFoundation\Response` objects for a given [path](https://swagger.io/specification/#paths-object) and method:
 
