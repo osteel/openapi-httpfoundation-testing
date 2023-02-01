@@ -64,10 +64,34 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
     /**
      * {@inheritdoc}
      *
+     * @param  string $file The OpenAPI definition file name.
+     *
+     * @return ValidatorBuilderInterface
+     */
+    public static function fromYamlFile(string $file): ValidatorBuilderInterface
+    {
+        return static::fromMethod('fromYamlFile', $file);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param  string $file The OpenAPI definition file name.
+     *
+     * @return ValidatorBuilderInterface
+     */
+    public static function fromJsonFile(string $file): ValidatorBuilderInterface
+    {
+        return static::fromMethod('fromJsonFile', $file);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * @param  string $definition The OpenAPI definition as YAML text.
      * @return ValidatorBuilderInterface
      */
-    public static function fromYamlRaw(string $definition): ValidatorBuilderInterface
+    public static function fromYamlString(string $definition): ValidatorBuilderInterface
     {
         return static::fromMethod('fromYaml', $definition);
     }
@@ -78,7 +102,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      * @param  string $definition The OpenAPI definition as JSON text.
      * @return ValidatorBuilderInterface
      */
-    public static function fromJsonRaw(string $definition): ValidatorBuilderInterface
+    public static function fromJsonString(string $definition): ValidatorBuilderInterface
     {
         return static::fromMethod('fromJson', $definition);
     }

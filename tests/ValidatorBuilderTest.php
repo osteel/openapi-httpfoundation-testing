@@ -17,10 +17,12 @@ class ValidatorBuilderTest extends TestCase
         return [
             ['fromYaml', self::$yamlDefinition],
             ['fromYaml', file_get_contents(self::$yamlDefinition)],
-            ['fromYamlRaw', file_get_contents(self::$yamlDefinition)],
+            ['fromYamlFile', self::$yamlDefinition],
+            ['fromYamlString', file_get_contents(self::$yamlDefinition)],
             ['fromJson', self::$jsonDefinition],
             ['fromJson', file_get_contents(self::$jsonDefinition)],
-            ['fromJsonRaw', file_get_contents(self::$jsonDefinition)],
+            ['fromJsonFile', self::$jsonDefinition],
+            ['fromJsonString', file_get_contents(self::$jsonDefinition)],
         ];
     }
 

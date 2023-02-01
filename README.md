@@ -1,4 +1,4 @@
-    # OpenAPI HttpFoundation Testing
+# OpenAPI HttpFoundation Testing
 
 [![Build Status](https://github.com/osteel/php-cli-demo/workflows/CI/badge.svg)](https://github.com/osteel/php-cli-demo/actions)
 [![Latest Stable Version](https://poser.pugx.org/osteel/openapi-httpfoundation-testing/v)](//packagist.org/packages/osteel/openapi-httpfoundation-testing)
@@ -43,17 +43,22 @@ Import the builder class:
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 ```
 
-Use the builder to create a `\Osteel\OpenApi\Testing\Validator` object, feeding it a YAML or JSON OpenAPI definition:
+Use the builder to create a `\Osteel\OpenApi\Testing\Validator` object, using one of the many factory methods for YAML or JSON:
 
 ```php
+// Choose one:
+
 $validator = ValidatorBuilder::fromYaml('my-definition.yaml')->getValidator();
-
-// or
-
 $validator = ValidatorBuilder::fromJson('my-definition.json')->getValidator();
+
+$validator = ValidatorBuilder::fromYamlFile('my-definition.yaml')->getValidator();
+$validator = ValidatorBuilder::fromJsonFile('my-definition.json')->getValidator();
+
+$validator = ValidatorBuilder::fromYamlString($already_loaded_yaml_string)->getValidator();
+$validator = ValidatorBuilder::fromJsonString($already_loaded_json_string)->getValidator();
 ```
 
-💡 _Instead of a file, you can also pass a YAML or JSON string directly into `fromJson` or `fromYaml`, or you can use `fromJsonRaw` or `fromYamlRaw`._
+💡 _`ValidatorBuilder::fromYaml` and `ValidatorBuilder::fromJson` can take either a file name or the contents of the file._
 
 You can now validate `\Symfony\Component\HttpFoundation\Request` and `\Symfony\Component\HttpFoundation\Response` objects for a given [path](https://swagger.io/specification/#paths-object) and method:
 
