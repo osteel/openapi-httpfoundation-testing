@@ -9,7 +9,8 @@ Validate HttpFoundation requests and responses against OpenAPI (3.0.x) definitio
 
 See [this post](https://tech.osteel.me/posts/openapi-backed-api-testing-in-php-projects-a-laravel-example "OpenAPI-backed API testing in PHP projects – a Laravel example") for more details and [this repository](https://github.com/osteel/openapi-httpfoundation-testing-laravel-example) for an example use in a Laravel project.
 
-💡 _While you can safely use this package for your projects, as long as version `1.0` has not been released "minor" version patches can contain breaking changes. Make sure to check the [release section](../../releases) before you upgrade._
+> **Note**
+> While you can safely use this package for your projects, as long as version `1.0` has not been released "minor" version patches can contain breaking changes. Make sure to check the [release section](../../releases) before you upgrade.
 
 ## Why?
 
@@ -25,7 +26,7 @@ This package is built upon the [OpenAPI PSR-7 Message Validator](https://github.
 
 It converts HttpFoundation request and response objects to PSR-7 messages using Symfony's [PSR-7 Bridge](https://symfony.com/doc/current/components/psr7.html) and [Tobias Nyholm](https://github.com/Nyholm)'s [PSR-7 implementation](https://github.com/Nyholm/psr7), before passing them on to OpenAPI PSR-7 Message Validator.
 
-## Install
+## Installation
 
 Via Composer:
 
@@ -33,7 +34,8 @@ Via Composer:
 $ composer require --dev osteel/openapi-httpfoundation-testing
 ```
 
-💡 _This package is mostly intended to be used as part of an API test suite._
+> **Note**
+> This package is mostly intended to be used as part of an API test suite.
 
 ## Usage
 
@@ -43,17 +45,24 @@ Import the builder class:
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 ```
 
-Use the builder to create a `\Osteel\OpenApi\Testing\Validator` object, feeding it a YAML or JSON OpenAPI definition:
+Use the builder to create a `\Osteel\OpenApi\Testing\Validator` object, using one of the available factory methods for YAML or JSON:
 
 ```php
-$validator = ValidatorBuilder::fromYaml('my-definition.yaml')->getValidator();
+// From a file:
 
-// or
+$validator = ValidatorBuilder::fromYamlFile($yamlFile)->getValidator();
+$validator = ValidatorBuilder::fromJsonFile($jsonFile)->getValidator();
 
-$validator = ValidatorBuilder::fromJson('my-definition.json')->getValidator();
+// From a string:
+
+$validator = ValidatorBuilder::fromYamlString($yamlString)->getValidator();
+$validator = ValidatorBuilder::fromJsonString($jsonString)->getValidator();
+
+// Automatic detection (slower):
+
+$validator = ValidatorBuilder::fromYaml($yamlFileOrString)->getValidator();
+$validator = ValidatorBuilder::fromJson($jsonFileOrString)->getValidator();
 ```
-
-💡 _Instead of a file, you can also pass a YAML or JSON string directly._
 
 You can now validate `\Symfony\Component\HttpFoundation\Request` and `\Symfony\Component\HttpFoundation\Response` objects for a given [path](https://swagger.io/specification/#paths-object) and method:
 
@@ -61,7 +70,8 @@ You can now validate `\Symfony\Component\HttpFoundation\Request` and `\Symfony\C
 $validator->validate($response, '/users', 'post');
 ```
 
-💡 _For convenience, objects implementing `\Psr\Http\Message\ServerRequestInterface` or `\Psr\Http\Message\ResponseInterface` are also accepted._
+> **Note**
+> For convenience, objects implementing `\Psr\Http\Message\ServerRequestInterface` or `\Psr\Http\Message\ResponseInterface` are also accepted.
 
 In the example above, we check that the response matches the OpenAPI definition for a `POST` request on the `/users` path.
 
