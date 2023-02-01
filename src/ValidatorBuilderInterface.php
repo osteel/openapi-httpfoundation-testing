@@ -9,7 +9,7 @@ interface ValidatorBuilderInterface
     /**
      * Create a ValidatorBuilderInterface object based on a YAML OpenAPI definition.
      *
-     * @param  string $definition The OpenAPI definition or a file name.
+     * @param  string $definition The OpenAPI definition.
      * @return ValidatorBuilderInterface
      */
     public static function fromYaml(string $definition): ValidatorBuilderInterface;
@@ -17,7 +17,7 @@ interface ValidatorBuilderInterface
     /**
      * Create a ValidatorBuilderInterface object based on a JSON OpenAPI definition.
      *
-     * @param  string $definition The OpenAPI definition or a file name.
+     * @param  string $definition The OpenAPI definition.
      * @return ValidatorBuilderInterface
      */
     public static function fromJson(string $definition): ValidatorBuilderInterface;
@@ -25,8 +25,7 @@ interface ValidatorBuilderInterface
     /**
      * Create a ValidatorBuilderInterface object based on a YAML OpenAPI definition.
      *
-     * @param  string $file The OpenAPI definition file name.
-     *
+     * @param  string $file The OpenAPI definition's file.
      * @return ValidatorBuilderInterface
      */
     public static function fromYamlFile(string $file): ValidatorBuilderInterface;
@@ -34,8 +33,7 @@ interface ValidatorBuilderInterface
     /**
      * Create a ValidatorBuilderInterface object based on a JSON OpenAPI definition.
      *
-     * @param  string $file The OpenAPI definition file name.
-     *
+     * @param  string $file The OpenAPI definition's file.
      * @return ValidatorBuilderInterface
      */
     public static function fromJsonFile(string $file): ValidatorBuilderInterface;
