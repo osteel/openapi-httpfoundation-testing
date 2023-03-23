@@ -5,7 +5,7 @@
 [![License](https://poser.pugx.org/osteel/openapi-httpfoundation-testing/license)](//packagist.org/packages/osteel/openapi-httpfoundation-testing)
 [![Downloads](http://poser.pugx.org/osteel/openapi-httpfoundation-testing/downloads)](//packagist.org/packages/osteel/openapi-httpfoundation-testing)
 
-Validate HttpFoundation requests and responses against OpenAPI (3.0.x) definitions.
+Validate HttpFoundation requests and responses against OpenAPI (3+) definitions.
 
 See [this post](https://tech.osteel.me/posts/openapi-backed-api-testing-in-php-projects-a-laravel-example "OpenAPI-backed API testing in PHP projects – a Laravel example") for more details and [this repository](https://github.com/osteel/openapi-httpfoundation-testing-laravel-example) for an example use in a Laravel project.
 
