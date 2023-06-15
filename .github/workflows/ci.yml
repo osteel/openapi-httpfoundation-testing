@@ -8,27 +8,30 @@ on:
 
 jobs:
 
-  phpcs:
-    name: PHP_CodeSniffer
+  style:
+    name: Style
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Run PHP_CodeSniffer
-        uses: chekalsky/phpcs-action@v1
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          tools: cs2pr, phpcs
 
-  phpunit:
-    name: PHPUnit
+      - name: Run phpcs
+        run: phpcs -q --report=checkstyle | cs2pr
+
+  tests:
+    name: Tests
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
         php-version:
-          - "7.3"
-          - "7.4"
           - "8.0"
           - "8.1"
           - "8.2"

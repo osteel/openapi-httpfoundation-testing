@@ -39,6 +39,6 @@ final class HttpFoundationAdapter implements AdapterInterface
             return $psrHttpFactory->createRequest($message);
         }
 
-        throw new InvalidArgumentException(sprintf('Unsupported %s object received', get_class($message)));
+        throw new InvalidArgumentException(sprintf('Unsupported %s object received', $message::class));
     }
 }

@@ -15,37 +15,11 @@ use Psr\Http\Message\ResponseInterface;
 
 final class Validator implements ValidatorInterface
 {
-    /**
-     * @var RoutedServerRequestValidator
-     */
-    private $requestValidator;
-
-    /**
-     * @var ResponseValidator
-     */
-    private $responseValidator;
-
-    /**
-     * @var AdapterInterface
-     */
-    private $adapter;
-
-    /**
-     * Constructor.
-     *
-     * @param  RoutedServerRequestValidator $requestValidator
-     * @param  ResponseValidator            $responseValidator
-     * @param  AdapterInterface             $adapter
-     * @return void
-     */
     public function __construct(
-        RoutedServerRequestValidator $requestValidator,
-        ResponseValidator $responseValidator,
-        AdapterInterface $adapter
+        private RoutedServerRequestValidator $requestValidator,
+        private ResponseValidator $responseValidator,
+        private AdapterInterface $adapter
     ) {
-        $this->requestValidator  = $requestValidator;
-        $this->responseValidator = $responseValidator;
-        $this->adapter           = $adapter;
     }
 
     /**

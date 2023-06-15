@@ -14,25 +14,10 @@ use Osteel\OpenApi\Testing\Adapters\HttpFoundationAdapter;
  */
 final class ValidatorBuilder implements ValidatorBuilderInterface
 {
-    /**
-     * @var string
-     */
-    private $adapter = HttpFoundationAdapter::class;
+    private string $adapter = HttpFoundationAdapter::class;
 
-    /**
-     * @var BaseValidatorBuilder
-     */
-    private $validatorBuilder;
-
-    /**
-     * Constructor.
-     *
-     * @param  BaseValidatorBuilder $builder
-     * @return void
-     */
-    public function __construct(BaseValidatorBuilder $builder)
+    public function __construct(private BaseValidatorBuilder $validatorBuilder)
     {
-        $this->validatorBuilder = $builder;
     }
 
     /**
