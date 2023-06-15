@@ -19,10 +19,10 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          tools: cs2pr, phpcs
+          tools: phpcs
 
       - name: Run phpcs
-        run: phpcs -q --report=checkstyle | cs2pr
+        run: phpcs
 
   tests:
     name: Tests

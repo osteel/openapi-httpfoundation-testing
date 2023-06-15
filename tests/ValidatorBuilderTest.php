@@ -58,7 +58,7 @@ class ValidatorBuilderTest extends TestCase
     public function testItSetsTheAdapter()
     {
         ValidatorBuilder::fromYaml(self::$yamlDefinition)
-            ->setAdapter(get_class($this->createMock(AdapterInterface::class)));
+            ->setAdapter($this->createMock(AdapterInterface::class)::class);
 
         // No exception means the test was successful.
         $this->assertTrue(true);

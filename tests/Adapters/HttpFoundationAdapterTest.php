@@ -12,10 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HttpFoundationAdapterTest extends TestCase
 {
-    /**
-     * @var HttpFoundationAdapter
-     */
-    private $sut;
+    private HttpFoundationAdapter $sut;
 
     protected function setUp(): void
     {
