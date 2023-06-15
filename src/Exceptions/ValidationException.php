@@ -13,7 +13,6 @@ class ValidationException extends Exception
     /**
      * Build a new exception from a ValidationFailed exception.
      *
-     * @param  ValidationFailed $exception
      * @return ValidationException
      */
     public static function fromValidationFailed(ValidationFailed $exception): ValidationException

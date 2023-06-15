@@ -1,5 +1,8 @@
 <!-- Provide a general summary of the issue in the Title above -->
 
+> **Warning**
+> Are you sure your issue is caused by this package? Almost all reported issues come from a misunderstanding of the [OpenAPI specification](https://swagger.io/specification/). Please make sure that your answer isn't there before posting.
+
 ## Detailed description
 
 Provide a detailed description of the change or addition you are proposing.

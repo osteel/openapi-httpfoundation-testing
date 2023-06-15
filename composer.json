@@ -23,7 +23,7 @@
         }
     ],
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^8.0",
         "ext-json": "*",
         "league/openapi-psr7-validator": "^0.19",
         "nyholm/psr7": "^1.0",
@@ -33,6 +33,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
+        "rector/rector": "^0.17.1",
         "squizlabs/php_codesniffer": "^3.5"
     },
     "autoload": {
@@ -47,8 +48,8 @@
     },
     "scripts": {
         "test": "phpunit",
-        "check-style": "phpcs src tests",
-        "fix-style": "phpcbf src tests"
+        "fix": "phpcbf src tests",
+        "refactor": "rector process"
     },
     "extra": {
         "branch-alias": {
