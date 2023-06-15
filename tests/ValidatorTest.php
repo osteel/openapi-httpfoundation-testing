@@ -6,14 +6,12 @@ namespace Osteel\OpenApi\Testing\Tests;
 
 use Osteel\OpenApi\Testing\Exceptions\ValidationException;
 use Osteel\OpenApi\Testing\Tests\TestCase;
+use Osteel\OpenApi\Testing\Validator;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 
 class ValidatorTest extends TestCase
 {
-    /**
-     * @var Validator
-     */
-    private $sut;
+    private Validator $sut;
 
     protected function setUp(): void
     {
@@ -42,10 +40,11 @@ class ValidatorTest extends TestCase
     public function testItDoesNotValidateTheRequestWithoutPayload(string $method)
     {
         $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('OpenAPI spec contains no such operation [/test,foo]');
 
         $request = $this->$method(static::PATH, 'delete');
 
-        $this->sut->validate($request, static::PATH, $method);
+        $this->sut->validate($request, static::PATH, 'foo');
     }
 
     /**
@@ -65,6 +64,7 @@ class ValidatorTest extends TestCase
     public function testItDoesNotValidateTheRequestWithPayload(string $method)
     {
         $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('Body does not match schema for content-type "application/json" for Request [post /test]: Keyword validation failed: Required property \'foo\' must be present in the object Field: foo');
 
         $request = $this->$method(static::PATH, 'post', ['baz' => 'bar']);
 
@@ -144,6 +144,7 @@ class ValidatorTest extends TestCase
     public function testItDoesNotValidateTheResponse(string $method)
     {
         $this->expectException(ValidationException::class);
+        $this->expectExceptionMessage('Body does not match schema for content-type "application/json" for Response [get /test 200]: Keyword validation failed: Required property \'foo\' must be present in the object Field: foo');
 
         $response = $this->$method(['baz' => 'bar']);
 

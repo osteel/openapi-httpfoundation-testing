@@ -28,13 +28,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Return a HttpFoundation response with the provided content.
      *
-     * @param  array $content
      * @return Response
      */
     protected function httpFoundationResponse(array $content = null): Response
     {
         return new Response(
-            $content ? json_encode($content) : '',
+            $content ? json_encode($content, JSON_THROW_ON_ERROR) : '',
             $content ? Response::HTTP_OK : Response::HTTP_NO_CONTENT,
             $content ? ['Content-Type' => 'application/json'] : []
         );
@@ -43,7 +42,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Return a PSR-7 response with the provided content.
      *
-     * @param  array $content
      * @return ResponseInterface
      */
     protected function psr7Response(array $content = null): ResponseInterface
@@ -55,7 +53,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             return $response;
         }
 
-        $response->method('getBody')->willReturn(json_encode($content));
+        $response->method('getBody')->willReturn(json_encode($content, JSON_THROW_ON_ERROR));
         $response->method('getStatusCode')->willReturn(Response::HTTP_OK);
         $response->method('getHeader')->willReturn(['application/json']);
 
@@ -65,9 +63,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Return a HttpFoundation request with the provided content.
      *
-     * @param  string $uri
-     * @param  string $method
-     * @param  array $content
      * @return Request
      */
     protected function httpFoundationRequest(string $uri, string $method, array $content = null): Request
@@ -79,16 +74,13 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             [],
             [],
             $content ? ['CONTENT_TYPE' => 'application/json'] : [],
-            $content ? json_encode($content) : ''
+            $content ? json_encode($content, JSON_THROW_ON_ERROR) : ''
         );
     }
 
     /**
      * Return a PSR-7 request with the provided content.
      *
-     * @param  string $uri
-     * @param  string $method
-     * @param  array  $content
      * @return ServerRequestInterface
      */
     protected function psr7Request(
@@ -98,7 +90,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     ): ServerRequestInterface {
         $psr17Factory = new Psr17Factory();
         $uri          = $psr17Factory->createUri(self::BASE_URI . $uri);
-        $stream       = $psr17Factory->createStream(json_encode($content));
+        $stream       = $psr17Factory->createStream(json_encode($content, JSON_THROW_ON_ERROR));
         $request      = $psr17Factory->createServerRequest($method, $uri);
 
         if ($content) {
