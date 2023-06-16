@@ -1,7 +1,6 @@
 * text=auto eol=lf
 
 /.github                 export-ignore
-/src                     export-ignore
 /tests                   export-ignore
 /.editorconfig           export-ignore
 /.gitattributes          export-ignore

@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use stdClass;
 
 class HttpFoundationAdapterTest extends TestCase
 {
@@ -24,9 +25,9 @@ class HttpFoundationAdapterTest extends TestCase
     public function test_it_does_not_convert_the_message_because_the_type_is_not_supported()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Unsupported InvalidArgumentException object received');
+        $this->expectExceptionMessage('Unsupported stdClass object received');
 
-        $this->sut->convert(new InvalidArgumentException());
+        $this->sut->convert(new stdClass());
     }
 
     public function test_it_converts_the_http_foundation_request()

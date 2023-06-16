@@ -13,10 +13,10 @@ use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-final class HttpFoundationAdapter implements AdapterInterface
+final class HttpFoundationAdapter implements MessageAdapterInterface
 {
     /**
-     * @inheritDoc
+     * Convert a HttpFoundation object to a PSR-7 HTTP message.
      *
      * @param object $message the HTTP message to convert
      */
