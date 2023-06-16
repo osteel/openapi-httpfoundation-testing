@@ -6,7 +6,6 @@ namespace Osteel\OpenApi\Testing\Tests;
 
 use InvalidArgumentException;
 use Osteel\OpenApi\Testing\Adapters\AdapterInterface;
-use Osteel\OpenApi\Testing\Tests\TestCase;
 use Osteel\OpenApi\Testing\Validator;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 
@@ -26,16 +25,14 @@ class ValidatorBuilderTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider definitionProvider
-     */
-    public function testItBuildsAValidator(string $method, string $definition)
+    /** @dataProvider definitionProvider */
+    public function test_it_builds_a_validator(string $method, string $definition)
     {
         $result = ValidatorBuilder::$method($definition)->getValidator();
 
         $this->assertInstanceOf(Validator::class, $result);
 
-        $request  = $this->httpFoundationRequest(static::PATH, 'get', ['foo' => 'bar']);
+        $request = $this->httpFoundationRequest(static::PATH, 'get', ['foo' => 'bar']);
         $response = $this->httpFoundationResponse(['foo' => 'bar']);
 
         // Validate a request and a response to make sure the definition was correctly parsed.
@@ -43,7 +40,7 @@ class ValidatorBuilderTest extends TestCase
         $this->assertTrue($result->get($response, static::PATH));
     }
 
-    public function testItDoesNotSetTheAdapterBecauseItsTypeIsInvalid()
+    public function test_it_does_not_set_the_adapter_because_its_type_is_invalid()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(
@@ -55,7 +52,7 @@ class ValidatorBuilderTest extends TestCase
         ValidatorBuilder::fromYaml(self::$yamlDefinition)->setAdapter(InvalidArgumentException::class);
     }
 
-    public function testItSetsTheAdapter()
+    public function test_it_sets_the_adapter()
     {
         ValidatorBuilder::fromYaml(self::$yamlDefinition)
             ->setAdapter($this->createMock(AdapterInterface::class)::class);

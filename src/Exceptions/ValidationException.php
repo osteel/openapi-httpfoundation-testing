@@ -10,15 +10,11 @@ use League\OpenAPIValidation\Schema\Exception\SchemaMismatch;
 
 class ValidationException extends Exception
 {
-    /**
-     * Build a new exception from a ValidationFailed exception.
-     *
-     * @return ValidationException
-     */
+    /** Build a new exception from a ValidationFailed exception. */
     public static function fromValidationFailed(ValidationFailed $exception): ValidationException
     {
         $previous = $exception;
-        $message  = $exception->getMessage();
+        $message = $exception->getMessage();
 
         while ($exception = $exception->getPrevious()) {
             $message .= sprintf(': %s', $exception->getMessage());

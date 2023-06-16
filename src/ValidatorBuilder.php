@@ -21,94 +21,83 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
-     * @param  string $definition The OpenAPI definition.
-     * @return ValidatorBuilderInterface
+     * @param string $definition the OpenAPI definition
      */
     public static function fromYaml(string $definition): ValidatorBuilderInterface
     {
         $method = is_file($definition) ? 'fromYamlFile' : 'fromYaml';
 
-        return static::fromMethod($method, $definition);
+        return self::fromMethod($method, $definition);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
-     * @param  string $definition The OpenAPI definition.
-     * @return ValidatorBuilderInterface
+     * @param string $definition the OpenAPI definition
      */
     public static function fromJson(string $definition): ValidatorBuilderInterface
     {
         $method = is_file($definition) ? 'fromJsonFile' : 'fromJson';
 
-        return static::fromMethod($method, $definition);
+        return self::fromMethod($method, $definition);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
-     * @param  string $definition The OpenAPI definition's file.
-     * @return ValidatorBuilderInterface
+     * @param string $definition the OpenAPI definition's file
      */
     public static function fromYamlFile(string $definition): ValidatorBuilderInterface
     {
-        return static::fromMethod('fromYamlFile', $definition);
+        return self::fromMethod('fromYamlFile', $definition);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
-     * @param  string $definition The OpenAPI definition's file.
-     * @return ValidatorBuilderInterface
+     * @param string $definition the OpenAPI definition's file
      */
     public static function fromJsonFile(string $definition): ValidatorBuilderInterface
     {
-        return static::fromMethod('fromJsonFile', $definition);
+        return self::fromMethod('fromJsonFile', $definition);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
-     * @param  string $definition The OpenAPI definition as YAML text.
-     * @return ValidatorBuilderInterface
+     * @param string $definition the OpenAPI definition as YAML text
      */
     public static function fromYamlString(string $definition): ValidatorBuilderInterface
     {
-        return static::fromMethod('fromYaml', $definition);
+        return self::fromMethod('fromYaml', $definition);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
-     * @param  string $definition The OpenAPI definition as JSON text.
-     * @return ValidatorBuilderInterface
+     * @param string $definition the OpenAPI definition as JSON text
      */
     public static function fromJsonString(string $definition): ValidatorBuilderInterface
     {
-        return static::fromMethod('fromJson', $definition);
+        return self::fromMethod('fromJson', $definition);
     }
 
     /**
      * Create a Validator object based on an OpenAPI definition.
      *
-     * @param  string $method     The ValidatorBuilder object's method to use.
-     * @param  string $definition The OpenAPI definition.
-     * @return ValidatorBuilderInterface
+     * @param string $method     the ValidatorBuilder object's method to use
+     * @param string $definition the OpenAPI definition
      */
     private static function fromMethod(string $method, string $definition): ValidatorBuilderInterface
     {
-        $builder = (new BaseValidatorBuilder())->$method($definition);
+        $builder = (new BaseValidatorBuilder())->{$method}($definition);
 
         return new ValidatorBuilder($builder);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return ValidatorInterface
-     */
+    /** @inheritDoc */
     public function getValidator(): ValidatorInterface
     {
         return new Validator(
@@ -122,8 +111,8 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      * Change the adapter to use. The provided class must implement
      * \Osteel\OpenApi\Testing\Adapters\AdapterInterface.
      *
-     * @param  string $class The adapter's class.
-     * @return ValidatorBuilder
+     * @param string $class the adapter's class
+     *
      * @throws InvalidArgumentException
      */
     public function setAdapter(string $class): ValidatorBuilder
