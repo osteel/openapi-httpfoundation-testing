@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Osteel\OpenApi\Testing\Adapters;
 
+use InvalidArgumentException;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -17,9 +18,9 @@ final class HttpFoundationAdapter implements AdapterInterface
     /**
      * @inheritDoc
      *
-     * @param Request|Response|ResponseInterface|ServerRequestInterface $message the HTTP message to convert
+     * @param object $message the HTTP message to convert
      */
-    public function convert(Request|Response|ResponseInterface|ServerRequestInterface $message): MessageInterface
+    public function convert(object $message): MessageInterface
     {
         if ($message instanceof ResponseInterface || $message instanceof ServerRequestInterface) {
             return $message;
@@ -32,6 +33,10 @@ final class HttpFoundationAdapter implements AdapterInterface
             return $psrHttpFactory->createResponse($message);
         }
 
-        return $psrHttpFactory->createRequest($message);
+        if ($message instanceof Request) {
+            return $psrHttpFactory->createRequest($message);
+        }
+
+        throw new InvalidArgumentException(sprintf('Unsupported %s object received', $message::class));
     }
 }

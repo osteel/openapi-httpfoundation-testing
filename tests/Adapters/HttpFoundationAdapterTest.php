@@ -2,6 +2,7 @@
 
 namespace Osteel\OpenApi\Testing\Tests\Adapters;
 
+use InvalidArgumentException;
 use Osteel\OpenApi\Testing\Adapters\HttpFoundationAdapter;
 use Osteel\OpenApi\Testing\Tests\TestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -18,6 +19,14 @@ class HttpFoundationAdapterTest extends TestCase
         parent::setUp();
 
         $this->sut = new HttpFoundationAdapter();
+    }
+
+    public function test_it_does_not_convert_the_message_because_the_type_is_not_supported()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unsupported InvalidArgumentException object received');
+
+        $this->sut->convert(new InvalidArgumentException());
     }
 
     public function test_it_converts_the_http_foundation_request()

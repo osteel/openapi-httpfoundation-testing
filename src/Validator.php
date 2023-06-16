@@ -11,9 +11,6 @@ use League\OpenAPIValidation\PSR7\RoutedServerRequestValidator;
 use Osteel\OpenApi\Testing\Adapters\AdapterInterface;
 use Osteel\OpenApi\Testing\Exceptions\ValidationException;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 final class Validator implements ValidatorInterface
 {
@@ -27,17 +24,14 @@ final class Validator implements ValidatorInterface
     /**
      * @inheritDoc
      *
-     * @param Request|Response|ResponseInterface|ServerRequestInterface $message the HTTP message to validate
-     * @param string                                                    $path    the OpenAPI path
-     * @param string                                                    $method  the HTTP method
+     * @param object $message the HTTP message to validate
+     * @param string $path    the OpenAPI path
+     * @param string $method  the HTTP method
      *
      * @throws ValidationException
      */
-    public function validate(
-        Request|Response|ResponseInterface|ServerRequestInterface $message,
-        string $path,
-        string $method,
-    ): bool {
+    public function validate(object $message, string $path, string $method): bool
+    {
         $message = $this->adapter->convert($message);
         $operation = $this->getOperationAddress($path, $method);
         $validator = $message instanceof ResponseInterface ? $this->responseValidator : $this->requestValidator;
@@ -68,12 +62,12 @@ final class Validator implements ValidatorInterface
     /**
      * @inheritDoc
      *
-     * @param Request|Response|ResponseInterface|ServerRequestInterface $message the HTTP message to validate
-     * @param string                                                    $path    the OpenAPI path
+     * @param object $message the HTTP message to validate
+     * @param string $path    the OpenAPI path
      *
      * @throws ValidationFailed
      */
-    public function delete(Request|Response|ResponseInterface|ServerRequestInterface $message, string $path): bool
+    public function delete(object $message, string $path): bool
     {
         return $this->validate($message, $path, 'delete');
     }
@@ -81,12 +75,12 @@ final class Validator implements ValidatorInterface
     /**
      * @inheritDoc
      *
-     * @param Request|Response|ResponseInterface|ServerRequestInterface $message the HTTP message to validate
-     * @param string                                                    $path    the OpenAPI path
+     * @param object $message the HTTP message to validate
+     * @param string $path    the OpenAPI path
      *
      * @throws ValidationFailed
      */
-    public function get(Request|Response|ResponseInterface|ServerRequestInterface $message, string $path): bool
+    public function get(object $message, string $path): bool
     {
         return $this->validate($message, $path, 'get');
     }
@@ -94,12 +88,12 @@ final class Validator implements ValidatorInterface
     /**
      * @inheritDoc
      *
-     * @param Request|Response|ResponseInterface|ServerRequestInterface $message the HTTP message to validate
-     * @param string                                                    $path    the OpenAPI path
+     * @param object $message the HTTP message to validate
+     * @param string $path    the OpenAPI path
      *
      * @throws ValidationFailed
      */
-    public function head(Request|Response|ResponseInterface|ServerRequestInterface $message, string $path): bool
+    public function head(object $message, string $path): bool
     {
         return $this->validate($message, $path, 'head');
     }
@@ -107,12 +101,12 @@ final class Validator implements ValidatorInterface
     /**
      * @inheritDoc
      *
-     * @param Request|Response|ResponseInterface|ServerRequestInterface $message the HTTP message to validate
-     * @param string                                                    $path    the OpenAPI path
+     * @param object $message the HTTP message to validate
+     * @param string $path    the OpenAPI path
      *
      * @throws ValidationFailed
      */
-    public function options(Request|Response|ResponseInterface|ServerRequestInterface $message, string $path): bool
+    public function options(object $message, string $path): bool
     {
         return $this->validate($message, $path, 'options');
     }
@@ -120,12 +114,12 @@ final class Validator implements ValidatorInterface
     /**
      * @inheritDoc
      *
-     * @param Request|Response|ResponseInterface|ServerRequestInterface $message the HTTP message to validate
-     * @param string                                                    $path    the OpenAPI path
+     * @param object $message the HTTP message to validate
+     * @param string $path    the OpenAPI path
      *
      * @throws ValidationFailed
      */
-    public function patch(Request|Response|ResponseInterface|ServerRequestInterface $message, string $path): bool
+    public function patch(object $message, string $path): bool
     {
         return $this->validate($message, $path, 'patch');
     }
@@ -133,12 +127,12 @@ final class Validator implements ValidatorInterface
     /**
      * @inheritDoc
      *
-     * @param Request|Response|ResponseInterface|ServerRequestInterface $message the HTTP message to validate
-     * @param string                                                    $path    the OpenAPI path
+     * @param object $message the HTTP message to validate
+     * @param string $path    the OpenAPI path
      *
      * @throws ValidationFailed
      */
-    public function post(Request|Response|ResponseInterface|ServerRequestInterface $message, string $path): bool
+    public function post(object $message, string $path): bool
     {
         return $this->validate($message, $path, 'post');
     }
@@ -146,12 +140,12 @@ final class Validator implements ValidatorInterface
     /**
      * @inheritDoc
      *
-     * @param Request|Response|ResponseInterface|ServerRequestInterface $message the HTTP message to validate
-     * @param string                                                    $path    the OpenAPI path
+     * @param object $message the HTTP message to validate
+     * @param string $path    the OpenAPI path
      *
      * @throws ValidationFailed
      */
-    public function put(Request|Response|ResponseInterface|ServerRequestInterface $message, string $path): bool
+    public function put(object $message, string $path): bool
     {
         return $this->validate($message, $path, 'put');
     }
@@ -159,12 +153,12 @@ final class Validator implements ValidatorInterface
     /**
      * @inheritDoc
      *
-     * @param Request|Response|ResponseInterface|ServerRequestInterface $message the HTTP message to validate
-     * @param string                                                    $path    the OpenAPI path
+     * @param object $message the HTTP message to validate
+     * @param string $path    the OpenAPI path
      *
      * @throws ValidationFailed
      */
-    public function trace(Request|Response|ResponseInterface|ServerRequestInterface $message, string $path): bool
+    public function trace(object $message, string $path): bool
     {
         return $this->validate($message, $path, 'trace');
     }
