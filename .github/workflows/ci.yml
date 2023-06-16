@@ -18,11 +18,12 @@ jobs:
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
-        with:
-          tools: phpcs
 
-      - name: Run phpcs
-        run: phpcs
+      - name: Install composer dependencies
+        uses: ramsey/composer-install@v2
+
+      - name: Check coding style
+        run: vendor/bin/php-cs-fixer fix --dry-run
 
   tests:
     name: Tests

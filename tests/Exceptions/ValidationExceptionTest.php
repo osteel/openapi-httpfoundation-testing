@@ -11,12 +11,12 @@ use Osteel\OpenApi\Testing\Tests\TestCase;
 
 class ValidationExceptionTest extends TestCase
 {
-    public function testItCreatesAnExceptionFromAValidationFailedException()
+    public function test_it_creates_an_exception_from_a_validation_failed_exception()
     {
         $breadCrumb = new BreadCrumb('qux');
-        $previous   = (new SchemaMismatch('baz'))->withBreadCrumb($breadCrumb);
-        $exception  = new ValidationFailed('foo', 0, new Exception('bar', 0, $previous));
-        $sut        = ValidationException::fromValidationFailed($exception);
+        $previous = (new SchemaMismatch('baz'))->withBreadCrumb($breadCrumb);
+        $exception = new ValidationFailed('foo', 0, new Exception('bar', 0, $previous));
+        $sut = ValidationException::fromValidationFailed($exception);
 
         $this->assertEquals('foo: bar: baz Field: qux', $sut->getMessage());
         $this->assertEquals($exception, $sut->getPrevious());

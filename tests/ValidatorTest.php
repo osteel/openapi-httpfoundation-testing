@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Osteel\OpenApi\Testing\Tests;
 
 use Osteel\OpenApi\Testing\Exceptions\ValidationException;
-use Osteel\OpenApi\Testing\Tests\TestCase;
 use Osteel\OpenApi\Testing\Validator;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 
@@ -24,7 +23,7 @@ class ValidatorTest extends TestCase
     |--------------------------------------------------------------------------
     | Requests
     |--------------------------------------------------------------------------
-    */
+     */
 
     public function requestTypeProvider(): array
     {
@@ -34,50 +33,42 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider requestTypeProvider
-     */
-    public function testItDoesNotValidateTheRequestWithoutPayload(string $method)
+    /** @dataProvider requestTypeProvider */
+    public function test_it_does_not_validate_the_request_without_payload(string $method)
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('OpenAPI spec contains no such operation [/test,foo]');
 
-        $request = $this->$method(static::PATH, 'delete');
+        $request = $this->{$method}(static::PATH, 'delete');
 
         $this->sut->validate($request, static::PATH, 'foo');
     }
 
-    /**
-     * @dataProvider requestTypeProvider
-     */
-    public function testItValidatesTheRequestWithoutPayload(string $method)
+    /** @dataProvider requestTypeProvider */
+    public function test_it_validates_the_request_without_payload(string $method)
     {
-        $request = $this->$method(static::PATH, $method);
-        $result  = $this->sut->validate($request, static::PATH, 'delete');
+        $request = $this->{$method}(static::PATH, $method);
+        $result = $this->sut->validate($request, static::PATH, 'delete');
 
         $this->assertTrue($result);
     }
 
-    /**
-     * @dataProvider requestTypeProvider
-     */
-    public function testItDoesNotValidateTheRequestWithPayload(string $method)
+    /** @dataProvider requestTypeProvider */
+    public function test_it_does_not_validate_the_request_with_payload(string $method)
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('Body does not match schema for content-type "application/json" for Request [post /test]: Keyword validation failed: Required property \'foo\' must be present in the object Field: foo');
 
-        $request = $this->$method(static::PATH, 'post', ['baz' => 'bar']);
+        $request = $this->{$method}(static::PATH, 'post', ['baz' => 'bar']);
 
         $this->sut->validate($request, static::PATH, 'post');
     }
 
-    /**
-     * @dataProvider requestTypeProvider
-     */
-    public function testItValidatesTheRequestWithPayload(string $method)
+    /** @dataProvider requestTypeProvider */
+    public function test_it_validates_the_request_with_payload(string $method)
     {
-        $request = $this->$method(static::PATH, 'post', ['foo' => 'bar']);
-        $result  = $this->sut->validate($request, static::PATH, 'post');
+        $request = $this->{$method}(static::PATH, 'post', ['foo' => 'bar']);
+        $result = $this->sut->validate($request, static::PATH, 'post');
 
         $this->assertTrue($result);
     }
@@ -93,13 +84,11 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider bodylessRequestMethodProvider
-     */
-    public function testItValidatesTheRequestWithoutPayloadUsingMethodShortcuts(string $method)
+    /** @dataProvider bodylessRequestMethodProvider */
+    public function test_it_validates_the_request_without_payload_using_method_shortcuts(string $method)
     {
         $request = $this->httpFoundationRequest(static::PATH, $method);
-        $result  = $this->sut->validate($request, static::PATH, $method);
+        $result = $this->sut->validate($request, static::PATH, $method);
 
         $this->assertTrue($result);
     }
@@ -113,13 +102,11 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider requestMethodProvider
-     */
-    public function testItValidatesTheRequestWithPaylodUsingShortcuts(string $method)
+    /** @dataProvider requestMethodProvider */
+    public function test_it_validates_the_request_with_paylod_using_shortcuts(string $method)
     {
         $request = $this->httpFoundationRequest(static::PATH, $method, ['foo' => 'bar']);
-        $result  = $this->sut->validate($request, static::PATH, $method);
+        $result = $this->sut->validate($request, static::PATH, $method);
 
         $this->assertTrue($result);
     }
@@ -128,7 +115,7 @@ class ValidatorTest extends TestCase
     |--------------------------------------------------------------------------
     | Responses
     |--------------------------------------------------------------------------
-    */
+     */
 
     public function responseTypeProvider(): array
     {
@@ -138,26 +125,22 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider responseTypeProvider
-     */
-    public function testItDoesNotValidateTheResponse(string $method)
+    /** @dataProvider responseTypeProvider */
+    public function test_it_does_not_validate_the_response(string $method)
     {
         $this->expectException(ValidationException::class);
         $this->expectExceptionMessage('Body does not match schema for content-type "application/json" for Response [get /test 200]: Keyword validation failed: Required property \'foo\' must be present in the object Field: foo');
 
-        $response = $this->$method(['baz' => 'bar']);
+        $response = $this->{$method}(['baz' => 'bar']);
 
         $this->sut->validate($response, static::PATH, 'get');
     }
 
-    /**
-     * @dataProvider responseTypeProvider
-     */
-    public function testItValidatesTheResponse(string $method)
+    /** @dataProvider responseTypeProvider */
+    public function test_it_validates_the_response(string $method)
     {
-        $response = $this->$method(['foo' => 'bar']);
-        $result   = $this->sut->validate($response, static::PATH, 'get');
+        $response = $this->{$method}(['foo' => 'bar']);
+        $result = $this->sut->validate($response, static::PATH, 'get');
 
         $this->assertTrue($result);
     }
@@ -175,12 +158,10 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider responseMethodProvider
-     */
-    public function testItValidatesTheResponseUsingMethodShortcuts(string $method)
+    /** @dataProvider responseMethodProvider */
+    public function test_it_validates_the_response_using_method_shortcuts(string $method)
     {
-        $result = $this->sut->$method($this->httpFoundationResponse(), static::PATH);
+        $result = $this->sut->{$method}($this->httpFoundationResponse(), static::PATH);
 
         $this->assertTrue($result);
     }
@@ -189,7 +170,7 @@ class ValidatorTest extends TestCase
     |--------------------------------------------------------------------------
     | Misc
     |--------------------------------------------------------------------------
-    */
+     */
 
     public function pathProvider(): array
     {
@@ -199,13 +180,11 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider pathProvider
-     */
-    public function testItFixesThePath(string $path)
+    /** @dataProvider pathProvider */
+    public function test_it_fixes_the_path(string $path)
     {
         $response = $this->httpFoundationResponse(['foo' => 'bar']);
-        $result   = $this->sut->validate($response, $path, 'get');
+        $result = $this->sut->validate($response, $path, 'get');
 
         $this->assertTrue($result);
     }
