@@ -93,23 +93,20 @@ The `validate` method returns `true` in case of success, and throws `\Osteel\Ope
 
 ## Change log
 
-Please see the [Releases section](../../releases) for more information on what has changed recently.
-
-## Testing
-
-```bash
-$ composer test
-```
+Please see the [Releases section](../../releases) for details.
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) and [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) for details.
+Please see [CONTRIBUTING](/.github/CONTRIBUTING.md) for details.
 
 ## Credits
 
 **People**
 
 - [Yannick Chenot](https://github.com/osteel)
+- [Patrick Rodacker](https://github.com/lordrhodos)
+- [Johnathan Michael Dell](https://github.com/johnathanmdell)
+- [Paul Mitchum](https://github.com/paul-m)
 - [All Contributors](../../contributors)
 
 Special thanks to [Pavel Batanov](https://github.com/scaytrase) for his advice on structuring the package.
