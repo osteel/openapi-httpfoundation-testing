@@ -36,6 +36,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.17",
+        "phpstan/phpstan": "^1.10",
         "phpunit/phpunit": "^9.6",
         "rector/rector": "^0.17.1"
     },
@@ -52,8 +53,10 @@
     "scripts": {
         "fix": "php-cs-fixer fix -v",
         "test": "phpunit",
+        "type": "phpstan",
         "all": [
             "@fix",
+            "@type",
             "@test"
         ],
         "refactor": "rector process"
