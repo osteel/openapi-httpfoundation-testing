@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Osteel\OpenApi\Testing\Adapters;
 
-use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 interface MessageAdapterInterface
 {
@@ -13,5 +14,5 @@ interface MessageAdapterInterface
      *
      * @param object $message the HTTP message to convert
      */
-    public function convert(object $message): MessageInterface;
+    public function convert(object $message): ResponseInterface|ServerRequestInterface;
 }

@@ -9,5 +9,6 @@
 /.php-cs-fixer.dist.php  export-ignore
 /.phpunit.result.cache   export-ignore
 /composer.lock           export-ignore
+/phpstan.neon.dist       export-ignore
 /phpunit.xml.dist        export-ignore
-rector.php               export-ignore
+/rector.php              export-ignore

@@ -6,7 +6,6 @@ namespace Osteel\OpenApi\Testing\Adapters;
 
 use InvalidArgumentException;
 use Nyholm\Psr7\Factory\Psr17Factory;
-use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
@@ -20,7 +19,7 @@ final class HttpFoundationAdapter implements MessageAdapterInterface
      *
      * @param object $message the HTTP message to convert
      */
-    public function convert(object $message): MessageInterface
+    public function convert(object $message): ResponseInterface|ServerRequestInterface
     {
         if ($message instanceof ResponseInterface || $message instanceof ServerRequestInterface) {
             return $message;

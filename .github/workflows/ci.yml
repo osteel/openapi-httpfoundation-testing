@@ -16,7 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup PHP
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
 
       - name: Install composer dependencies
@@ -24,6 +24,23 @@ jobs:
 
       - name: Check coding style
         run: vendor/bin/php-cs-fixer fix --dry-run
+
+  type:
+    name: Type
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+
+      - name: Install composer dependencies
+        uses: ramsey/composer-install@v2
+
+      - name: Check code typing
+        run: vendor/bin/phpstan
 
   tests:
     name: Tests
@@ -55,5 +72,5 @@ jobs:
         with:
           dependency-versions: ${{ matrix.dependency-versions }}
 
-      - name: Run PHPUnit
+      - name: Run tests
         run: vendor/bin/phpunit tests

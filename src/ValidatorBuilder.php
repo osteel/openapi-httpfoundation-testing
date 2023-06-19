@@ -16,8 +16,10 @@ use Osteel\OpenApi\Testing\Cache\Psr16Adapter;
  */
 final class ValidatorBuilder implements ValidatorBuilderInterface
 {
+    /** @var class-string<MessageAdapterInterface> */
     private string $adapter = HttpFoundationAdapter::class;
 
+    /** @var class-string<CacheAdapterInterface> */
     private string $cacheAdapter = Psr16Adapter::class;
 
     public function __construct(private BaseValidatorBuilder $validatorBuilder)
