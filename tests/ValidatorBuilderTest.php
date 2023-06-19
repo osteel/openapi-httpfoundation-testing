@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Osteel\OpenApi\Testing\Tests;
 
 use InvalidArgumentException;
-use Osteel\OpenApi\Testing\Adapters\AdapterInterface;
+use Osteel\OpenApi\Testing\Adapters\MessageAdapterInterface;
+use Osteel\OpenApi\Testing\Cache\CacheAdapterInterface;
 use Osteel\OpenApi\Testing\Validator;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
+use stdClass;
 
 class ValidatorBuilderTest extends TestCase
 {
@@ -45,19 +47,38 @@ class ValidatorBuilderTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(
             'Class %s does not implement the %s interface',
-            InvalidArgumentException::class,
-            AdapterInterface::class
+            stdClass::class,
+            MessageAdapterInterface::class
         ));
 
-        ValidatorBuilder::fromYaml(self::$yamlDefinition)->setAdapter(InvalidArgumentException::class);
+        ValidatorBuilder::fromYaml(self::$yamlDefinition)->setMessageAdapter(stdClass::class);
     }
 
     public function test_it_sets_the_adapter()
     {
         ValidatorBuilder::fromYaml(self::$yamlDefinition)
-            ->setAdapter($this->createMock(AdapterInterface::class)::class);
+            ->setMessageAdapter($this->createMock(MessageAdapterInterface::class)::class);
 
-        // No exception means the test was successful.
-        $this->assertTrue(true);
+        $this->addToAssertionCount(1);
+    }
+
+    public function test_it_does_not_set_the_cache_adapter_because_its_type_is_invalid()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf(
+            'Class %s does not implement the %s interface',
+            stdClass::class,
+            CacheAdapterInterface::class
+        ));
+
+        ValidatorBuilder::fromYaml(self::$yamlDefinition)->setCacheAdapter(stdClass::class);
+    }
+
+    public function test_it_sets_the_cache_adapter()
+    {
+        ValidatorBuilder::fromYaml(self::$yamlDefinition)
+            ->setCacheAdapter($this->createMock(CacheAdapterInterface::class)::class);
+
+        $this->addToAssertionCount(1);
     }
 }

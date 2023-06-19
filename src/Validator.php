@@ -8,7 +8,7 @@ use League\OpenAPIValidation\PSR7\Exception\ValidationFailed;
 use League\OpenAPIValidation\PSR7\OperationAddress;
 use League\OpenAPIValidation\PSR7\ResponseValidator;
 use League\OpenAPIValidation\PSR7\RoutedServerRequestValidator;
-use Osteel\OpenApi\Testing\Adapters\AdapterInterface;
+use Osteel\OpenApi\Testing\Adapters\MessageAdapterInterface;
 use Osteel\OpenApi\Testing\Exceptions\ValidationException;
 use Psr\Http\Message\ResponseInterface;
 
@@ -17,7 +17,7 @@ final class Validator implements ValidatorInterface
     public function __construct(
         private RoutedServerRequestValidator $requestValidator,
         private ResponseValidator $responseValidator,
-        private AdapterInterface $adapter
+        private MessageAdapterInterface $adapter
     ) {
     }
 

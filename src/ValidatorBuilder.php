@@ -6,8 +6,10 @@ namespace Osteel\OpenApi\Testing;
 
 use InvalidArgumentException;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder as BaseValidatorBuilder;
-use Osteel\OpenApi\Testing\Adapters\AdapterInterface;
+use Osteel\OpenApi\Testing\Adapters\MessageAdapterInterface;
 use Osteel\OpenApi\Testing\Adapters\HttpFoundationAdapter;
+use Osteel\OpenApi\Testing\Cache\CacheAdapterInterface;
+use Osteel\OpenApi\Testing\Cache\Psr16Adapter;
 
 /**
  * This class creates Validator objects based on OpenAPI definitions.
@@ -15,6 +17,8 @@ use Osteel\OpenApi\Testing\Adapters\HttpFoundationAdapter;
 final class ValidatorBuilder implements ValidatorBuilderInterface
 {
     private string $adapter = HttpFoundationAdapter::class;
+
+    private string $cacheAdapter = Psr16Adapter::class;
 
     public function __construct(private BaseValidatorBuilder $validatorBuilder)
     {
@@ -98,6 +102,16 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
     }
 
     /** @inheritDoc */
+    public function setCache(object $cache): ValidatorBuilderInterface
+    {
+        $adapter = new $this->cacheAdapter();
+
+        $this->validatorBuilder->setCache($adapter->convert($cache));
+
+        return $this;
+    }
+
+    /** @inheritDoc */
     public function getValidator(): ValidatorInterface
     {
         return new Validator(
@@ -108,25 +122,42 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
     }
 
     /**
-     * Change the adapter to use. The provided class must implement
-     * \Osteel\OpenApi\Testing\Adapters\AdapterInterface.
+     * Change the adapter to use. The provided class must implement \Osteel\OpenApi\Testing\Adapters\AdapterInterface.
      *
      * @param string $class the adapter's class
      *
      * @throws InvalidArgumentException
      */
-    public function setAdapter(string $class): ValidatorBuilder
+    public function setMessageAdapter(string $class): ValidatorBuilder
     {
-        if (! is_subclass_of($class, AdapterInterface::class)) {
-            throw new InvalidArgumentException(sprintf(
-                'Class %s does not implement the %s interface',
-                $class,
-                AdapterInterface::class
-            ));
+        if (is_subclass_of($class, MessageAdapterInterface::class)) {
+            $this->adapter = $class;
+
+            return $this;
         }
 
-        $this->adapter = $class;
+        throw new InvalidArgumentException(
+            sprintf('Class %s does not implement the %s interface', $class, MessageAdapterInterface::class),
+        );
+    }
 
-        return $this;
+    /**
+     * Change the cache adapter to use. The provided class must implement \Osteel\OpenApi\Testing\Cache\AdapterInterface.
+     *
+     * @param string $class the cache adapter's class
+     *
+     * @throws InvalidArgumentException
+     */
+    public function setCacheAdapter(string $class): ValidatorBuilder
+    {
+        if (is_subclass_of($class, CacheAdapterInterface::class)) {
+            $this->cacheAdapter = $class;
+
+            return $this;
+        }
+
+        throw new InvalidArgumentException(
+            sprintf('Class %s does not implement the %s interface', $class, CacheAdapterInterface::class),
+        );
     }
 }

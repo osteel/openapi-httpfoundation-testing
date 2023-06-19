@@ -6,7 +6,7 @@ namespace Osteel\OpenApi\Testing\Adapters;
 
 use Psr\Http\Message\MessageInterface;
 
-interface AdapterInterface
+interface MessageAdapterInterface
 {
     /**
      * Convert a HTTP message to a PSR-7 HTTP message.

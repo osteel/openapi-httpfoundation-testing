@@ -48,6 +48,9 @@ interface ValidatorBuilderInterface
      */
     public static function fromJsonString(string $definition): ValidatorBuilderInterface;
 
+    /** Set a cache library. */
+    public function setCache(object $cache): ValidatorBuilderInterface;
+
     /** Return the validator. */
     public function getValidator(): ValidatorInterface;
 }
