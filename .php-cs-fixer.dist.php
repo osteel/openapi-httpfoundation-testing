@@ -32,7 +32,7 @@ return $config->setRules([
         'explicit_indirect_variable' => true,
         'explicit_string_variable' => true,
         'fully_qualified_strict_types' => true,
-        'function_typehint_space' => true,
+        'type_declaration_spaces' => true,
         'general_phpdoc_tag_rename' => [
             'replacements' => ['inheritDocs' => 'inheritDoc'],
         ],
@@ -59,7 +59,7 @@ return $config->setRules([
             'strategy' => 'no_multi_line',
         ],
         'native_function_casing' => true,
-        'native_function_type_declaration_casing' => true,
+        'native_type_declaration_casing' => true,
         'no_alias_language_construct_call' => true,
         'no_alternative_syntax' => true,
         'no_blank_lines_after_phpdoc' => true,
@@ -96,7 +96,7 @@ return $config->setRules([
                 'yield_from',
             ],
         ],
-        'no_unneeded_curly_braces' => [
+        'no_unneeded_braces' => [
             'namespaces' => false,
         ],
         'no_unneeded_import_alias' => true,
