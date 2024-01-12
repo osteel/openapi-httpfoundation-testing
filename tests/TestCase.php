@@ -7,6 +7,7 @@ namespace Osteel\OpenApi\Testing\Tests;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -42,7 +43,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             return $response;
         }
 
-        $response->method('getBody')->willReturn(json_encode($content, JSON_THROW_ON_ERROR));
+        $body = $this->createMock(StreamInterface::class);
+        $body->method('__toString')->willReturn(json_encode($content, JSON_THROW_ON_ERROR));
+
+        $response->method('getBody')->willReturn($body);
         $response->method('getStatusCode')->willReturn(Response::HTTP_OK);
         $response->method('getHeader')->willReturn(['application/json']);
 
