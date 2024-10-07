@@ -1,15 +1,17 @@
 # OpenAPI HttpFoundation Testing
 
-[![Build Status](https://github.com/osteel/php-cli-demo/workflows/CI/badge.svg)](https://github.com/osteel/php-cli-demo/actions)
-[![Latest Stable Version](https://poser.pugx.org/osteel/openapi-httpfoundation-testing/v)](//packagist.org/packages/osteel/openapi-httpfoundation-testing)
-[![License](https://poser.pugx.org/osteel/openapi-httpfoundation-testing/license)](//packagist.org/packages/osteel/openapi-httpfoundation-testing)
-[![Downloads](http://poser.pugx.org/osteel/openapi-httpfoundation-testing/downloads)](//packagist.org/packages/osteel/openapi-httpfoundation-testing)
+[![Build Status](https://github.com/osteel/openapi-httpfoundation-testing/workflows/CI/badge.svg)](https://github.com/osteel/openapi-httpfoundation-testing/actions)
+[![Latest Stable Version](https://img.shields.io/packagist/v/osteel/openapi-httpfoundation-testing)](https://packagist.org/packages/osteel/openapi-httpfoundation-testing)
+[![License](https://img.shields.io/packagist/l/osteel/openapi-httpfoundation-testing)](https://packagist.org/packages/osteel/openapi-httpfoundation-testing)
+[![Downloads](https://img.shields.io/packagist/dt/osteel/openapi-httpfoundation-testing)](https://packagist.org/packages/osteel/openapi-httpfoundation-testing)
+
 
 Validate HttpFoundation requests and responses against OpenAPI (3+) definitions.
 
 See [this post](https://tech.osteel.me/posts/openapi-backed-api-testing-in-php-projects-a-laravel-example "OpenAPI-backed API testing in PHP projects – a Laravel example") for more details and [this repository](https://github.com/osteel/openapi-httpfoundation-testing-laravel-example) for an example use in a Laravel project.
 
-> 💡 While you can safely use this package for your projects, as long as version `1.0` has not been released "minor" version patches can contain breaking changes. Make sure to check the [release section](../../releases) before you upgrade.
+> [!IMPORTANT]
+> While you can safely use this package for your projects, as long as version `1.0` has not been released "minor" version patches can contain breaking changes. Make sure to check the [release section](../../releases) before you upgrade.
 
 ## Why?
 
@@ -27,7 +29,8 @@ It converts HttpFoundation request and response objects to PSR-7 messages using 
 
 ## Installation
 
-> 💡 This package is mostly intended to be used as part of an API test suite.
+> [!NOTE]
+> This package is mostly intended to be used as part of an API test suite.
 
 Via Composer:
 
@@ -62,7 +65,8 @@ $validator = ValidatorBuilder::fromYaml($yamlFileOrString)->getValidator();
 $validator = ValidatorBuilder::fromJson($jsonFileOrString)->getValidator();
 ```
 
-> 💡 You can also use a dependency injection container to bind the `ValidatorBuilder` class to the [`ValidatorBuilderInterface`](/src/ValidatorBuilderInterface.php) interface it implements and inject the interface instead, which would also be useful for testing and mocking.
+> [!TIP]
+> You can also use a dependency injection container to bind the `ValidatorBuilder` class to the [`ValidatorBuilderInterface`](/src/ValidatorBuilderInterface.php) interface it implements and inject the interface instead, which would also be useful for testing and mocking.
 
 You can now validate `\Symfony\Component\HttpFoundation\Request` and `\Symfony\Component\HttpFoundation\Response` objects for a given [path](https://swagger.io/specification/#paths-object) and method:
 
@@ -70,7 +74,8 @@ You can now validate `\Symfony\Component\HttpFoundation\Request` and `\Symfony\C
 $validator->validate($response, '/users', 'post');
 ```
 
-> 💡 For convenience, objects implementing `\Psr\Http\Message\ServerRequestInterface` or `\Psr\Http\Message\ResponseInterface` are also accepted.
+> [!TIP]
+> For convenience, objects implementing `\Psr\Http\Message\ServerRequestInterface` or `\Psr\Http\Message\ResponseInterface` are also accepted.
 
 In the example above, we check that the response matches the OpenAPI definition for a `POST` request on the `/users` path.
 
