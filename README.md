@@ -32,7 +32,7 @@ It converts HttpFoundation request and response objects to PSR-7 messages using 
 Via Composer:
 
 ```bash
-$ composer require --dev osteel/openapi-httpfoundation-testing
+composer require --dev osteel/openapi-httpfoundation-testing
 ```
 
 ## Usage
