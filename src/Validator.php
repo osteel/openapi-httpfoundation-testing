@@ -65,7 +65,7 @@ final class Validator implements ValidatorInterface
      * @param object $message the HTTP message to validate
      * @param string $path    the OpenAPI path
      *
-     * @throws ValidationFailed
+     * @throws ValidationException
      */
     public function delete(object $message, string $path): bool
     {
@@ -78,7 +78,7 @@ final class Validator implements ValidatorInterface
      * @param object $message the HTTP message to validate
      * @param string $path    the OpenAPI path
      *
-     * @throws ValidationFailed
+     * @throws ValidationException
      */
     public function get(object $message, string $path): bool
     {
@@ -91,7 +91,7 @@ final class Validator implements ValidatorInterface
      * @param object $message the HTTP message to validate
      * @param string $path    the OpenAPI path
      *
-     * @throws ValidationFailed
+     * @throws ValidationException
      */
     public function head(object $message, string $path): bool
     {
@@ -104,7 +104,7 @@ final class Validator implements ValidatorInterface
      * @param object $message the HTTP message to validate
      * @param string $path    the OpenAPI path
      *
-     * @throws ValidationFailed
+     * @throws ValidationException
      */
     public function options(object $message, string $path): bool
     {
@@ -117,7 +117,7 @@ final class Validator implements ValidatorInterface
      * @param object $message the HTTP message to validate
      * @param string $path    the OpenAPI path
      *
-     * @throws ValidationFailed
+     * @throws ValidationException
      */
     public function patch(object $message, string $path): bool
     {
@@ -130,7 +130,7 @@ final class Validator implements ValidatorInterface
      * @param object $message the HTTP message to validate
      * @param string $path    the OpenAPI path
      *
-     * @throws ValidationFailed
+     * @throws ValidationException
      */
     public function post(object $message, string $path): bool
     {
@@ -143,7 +143,7 @@ final class Validator implements ValidatorInterface
      * @param object $message the HTTP message to validate
      * @param string $path    the OpenAPI path
      *
-     * @throws ValidationFailed
+     * @throws ValidationException
      */
     public function put(object $message, string $path): bool
     {
@@ -156,7 +156,7 @@ final class Validator implements ValidatorInterface
      * @param object $message the HTTP message to validate
      * @param string $path    the OpenAPI path
      *
-     * @throws ValidationFailed
+     * @throws ValidationException
      */
     public function trace(object $message, string $path): bool
     {
