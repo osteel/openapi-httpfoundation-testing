@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Osteel\OpenApi\Testing\Tests;
 
+use cebe\openapi\Reader;
 use InvalidArgumentException;
 use Osteel\OpenApi\Testing\Adapters\MessageAdapterInterface;
 use Osteel\OpenApi\Testing\Cache\CacheAdapterInterface;
+use Osteel\OpenApi\Testing\OpenApiSpecFactoryInterface;
 use Osteel\OpenApi\Testing\Validator;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
 use stdClass;
@@ -31,6 +33,30 @@ class ValidatorBuilderTest extends TestCase
     public function test_it_builds_a_validator(string $method, string $definition)
     {
         $result = ValidatorBuilder::$method($definition)->getValidator();
+
+        $this->assertInstanceOf(Validator::class, $result);
+
+        $request = $this->httpFoundationRequest(static::PATH, 'get', ['foo' => 'bar']);
+        $response = $this->httpFoundationResponse(['foo' => 'bar']);
+
+        // Validate a request and a response to make sure the definition was correctly parsed.
+        $this->assertTrue($result->get($request, static::PATH));
+        $this->assertTrue($result->get($response, static::PATH));
+    }
+
+    public function test_it_builds_a_validator_given_a_absolute_url(): void
+    {
+        $url = 'https://foobar.localhost/openapi.yaml';
+
+        $openApiFactory = $this->createMock(OpenApiSpecFactoryInterface::class);
+        $openApiFactory->expects($this->once())
+            ->method('readFromYamlFile')
+            ->with($url)
+            ->willReturn(Reader::readFromYamlFile(self::$yamlDefinition));
+
+        ValidatorBuilder::setOpenApiSpecFactoryResolver(fn () => $openApiFactory);
+
+        $result = ValidatorBuilder::fromYaml($url)->getValidator();
 
         $this->assertInstanceOf(Validator::class, $result);
 

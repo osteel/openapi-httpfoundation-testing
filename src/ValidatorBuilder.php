@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Osteel\OpenApi\Testing;
 
+use Closure;
 use InvalidArgumentException;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder as BaseValidatorBuilder;
 use Osteel\OpenApi\Testing\Adapters\MessageAdapterInterface;
@@ -16,6 +17,9 @@ use Osteel\OpenApi\Testing\Cache\Psr16Adapter;
  */
 final class ValidatorBuilder implements ValidatorBuilderInterface
 {
+    /** @var ?Closure():OpenApiSpecFactoryInterface */
+    private static ?Closure $openApiSpecFactoryResolver = null;
+
     /** @var class-string<MessageAdapterInterface> */
     private string $adapter = HttpFoundationAdapter::class;
 
@@ -33,9 +37,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromYaml(string $definition): ValidatorBuilderInterface
     {
-        $method = is_file($definition) ? 'fromYamlFile' : 'fromYaml';
-
-        return self::fromMethod($method, $definition);
+        return self::fromYamlFile($definition);
     }
 
     /**
@@ -45,9 +47,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromJson(string $definition): ValidatorBuilderInterface
     {
-        $method = is_file($definition) ? 'fromJsonFile' : 'fromJson';
-
-        return self::fromMethod($method, $definition);
+        return self::fromJsonFile($definition);
     }
 
     /**
@@ -57,7 +57,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromYamlFile(string $definition): ValidatorBuilderInterface
     {
-        return self::fromMethod('fromYamlFile', $definition);
+        return self::fromMethod(self::determineMethod($definition, 'yaml'), $definition);
     }
 
     /**
@@ -67,7 +67,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromJsonFile(string $definition): ValidatorBuilderInterface
     {
-        return self::fromMethod('fromJsonFile', $definition);
+        return self::fromMethod(self::determineMethod($definition, 'json'), $definition);
     }
 
     /**
@@ -98,9 +98,49 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     private static function fromMethod(string $method, string $definition): ValidatorBuilderInterface
     {
+        $openApiFactory = self::getOpenApiSpecFactory();
+
+        $definition = match ($method) {
+            'fromJsonSchema' => $openApiFactory->readFromJsonFile($definition),
+            'fromYamlSchema' => $openApiFactory->readFromYamlFile($definition),
+            default => $definition,
+        };
+
+        if (in_array($method, ['fromJsonSchema', 'fromYamlSchema'], true)) {
+            $method = 'fromSchema';
+        }
+
         $builder = (new BaseValidatorBuilder())->{$method}($definition);
 
         return new ValidatorBuilder($builder);
+    }
+
+    private static function determineMethod(string $definition, string $format): string
+    {
+        if (filter_var($definition, FILTER_VALIDATE_URL) && in_array(parse_url($definition, PHP_URL_SCHEME), ['http', 'https'], true)) {
+            return sprintf('from%sSchema', ucfirst($format));
+        }
+
+        if (is_file($definition)) {
+            return sprintf('from%sFile', ucfirst($format));
+        }
+
+        return sprintf('from%s', ucfirst($format));
+    }
+
+    /** @param ?Closure():OpenApiSpecFactoryInterface $resolver */
+    public static function setOpenApiSpecFactoryResolver(?Closure $resolver = null): void
+    {
+        self::$openApiSpecFactoryResolver = $resolver;
+    }
+
+    public static function getOpenApiSpecFactory(): OpenApiSpecFactoryInterface
+    {
+        if (self::$openApiSpecFactoryResolver === null) {
+            return new OpenApiSpecFactory();
+        }
+
+        return (self::$openApiSpecFactoryResolver)();
     }
 
     /** @inheritDoc */
