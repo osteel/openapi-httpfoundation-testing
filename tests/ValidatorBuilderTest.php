@@ -17,12 +17,16 @@ class ValidatorBuilderTest extends TestCase
     {
         return [
             ['fromYaml', self::$yamlDefinition],
+            ['fromYaml', 'https://raw.githubusercontent.com/osteel/openapi-httpfoundation-testing/refs/heads/main/tests/stubs/example.yaml'],
             ['fromYaml', file_get_contents(self::$yamlDefinition)],
             ['fromYamlFile', self::$yamlDefinition],
+            ['fromYamlFile', 'https://raw.githubusercontent.com/osteel/openapi-httpfoundation-testing/refs/heads/main/tests/stubs/example.yaml'],
             ['fromYamlString', file_get_contents(self::$yamlDefinition)],
             ['fromJson', self::$jsonDefinition],
+            ['fromJson', 'https://raw.githubusercontent.com/osteel/openapi-httpfoundation-testing/refs/heads/main/tests/stubs/example.json'],
             ['fromJson', file_get_contents(self::$jsonDefinition)],
             ['fromJsonFile', self::$jsonDefinition],
+            ['fromJsonFile', 'https://raw.githubusercontent.com/osteel/openapi-httpfoundation-testing/refs/heads/main/tests/stubs/example.json'],
             ['fromJsonString', file_get_contents(self::$jsonDefinition)],
         ];
     }

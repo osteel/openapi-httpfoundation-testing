@@ -23,7 +23,7 @@ jobs:
         uses: ramsey/composer-install@v2
 
       - name: Check coding style
-        run: vendor/bin/php-cs-fixer fix --dry-run
+        run: vendor/bin/php-cs-fixer fix --dry-run -v
 
   type:
     name: Type

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Osteel\OpenApi\Testing;
 
+use cebe\openapi\Reader;
 use InvalidArgumentException;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder as BaseValidatorBuilder;
 use Osteel\OpenApi\Testing\Adapters\MessageAdapterInterface;
@@ -33,7 +34,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromYaml(string $definition): ValidatorBuilderInterface
     {
-        $method = is_file($definition) ? 'fromYamlFile' : 'fromYaml';
+        $method = self::isUrl($definition) || is_file($definition) ? 'readFromYamlFile' : 'readFromYaml';
 
         return self::fromMethod($method, $definition);
     }
@@ -45,9 +46,20 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromJson(string $definition): ValidatorBuilderInterface
     {
-        $method = is_file($definition) ? 'fromJsonFile' : 'fromJson';
+        $method = self::isUrl($definition) || is_file($definition) ? 'readFromJsonFile' : 'readFromJson';
 
         return self::fromMethod($method, $definition);
+    }
+
+    private static function isUrl(string $value): bool
+    {
+        if (! filter_var($value, FILTER_VALIDATE_URL)) {
+            return false;
+        }
+
+        $scheme = parse_url($value, PHP_URL_SCHEME);
+
+        return in_array($scheme, ['http', 'https'], true);
     }
 
     /**
@@ -57,7 +69,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromYamlFile(string $definition): ValidatorBuilderInterface
     {
-        return self::fromMethod('fromYamlFile', $definition);
+        return self::fromMethod('readFromYamlFile', $definition);
     }
 
     /**
@@ -67,7 +79,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromJsonFile(string $definition): ValidatorBuilderInterface
     {
-        return self::fromMethod('fromJsonFile', $definition);
+        return self::fromMethod('readFromJsonFile', $definition);
     }
 
     /**
@@ -77,7 +89,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromYamlString(string $definition): ValidatorBuilderInterface
     {
-        return self::fromMethod('fromYaml', $definition);
+        return self::fromMethod('readFromYaml', $definition);
     }
 
     /**
@@ -87,7 +99,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromJsonString(string $definition): ValidatorBuilderInterface
     {
-        return self::fromMethod('fromJson', $definition);
+        return self::fromMethod('readFromJson', $definition);
     }
 
     /**
@@ -98,7 +110,8 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     private static function fromMethod(string $method, string $definition): ValidatorBuilderInterface
     {
-        $builder = (new BaseValidatorBuilder())->{$method}($definition);
+        $specObject = Reader::{$method}($definition);
+        $builder = (new BaseValidatorBuilder())->fromSchema($specObject);
 
         return new ValidatorBuilder($builder);
     }
