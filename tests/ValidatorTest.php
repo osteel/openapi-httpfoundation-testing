@@ -25,7 +25,7 @@ class ValidatorTest extends TestCase
     |--------------------------------------------------------------------------
      */
 
-    public static function requestTypeProvider(): array
+    public function requestTypeProvider(): array
     {
         return [
             ['httpFoundationRequest'],
@@ -73,7 +73,7 @@ class ValidatorTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public static function bodylessRequestMethodProvider(): array
+    public function bodylessRequestMethodProvider(): array
     {
         return [
             ['delete'],
@@ -93,7 +93,7 @@ class ValidatorTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public static function requestMethodProvider(): array
+    public function requestMethodProvider(): array
     {
         return [
             ['patch'],
@@ -117,7 +117,7 @@ class ValidatorTest extends TestCase
     |--------------------------------------------------------------------------
      */
 
-    public static function responseTypeProvider(): array
+    public function responseTypeProvider(): array
     {
         return [
             ['httpFoundationResponse'],
@@ -145,7 +145,7 @@ class ValidatorTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public static function responseMethodProvider(): array
+    public function responseMethodProvider(): array
     {
         return [
             ['delete'],
@@ -172,7 +172,7 @@ class ValidatorTest extends TestCase
     |--------------------------------------------------------------------------
      */
 
-    public static function pathProvider(): array
+    public function pathProvider(): array
     {
         return [
             ['/test'],

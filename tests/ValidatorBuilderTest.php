@@ -13,7 +13,7 @@ use stdClass;
 
 class ValidatorBuilderTest extends TestCase
 {
-    public static function definitionProvider(): array
+    public function definitionProvider(): array
     {
         return [
             ['fromYaml', self::$yamlDefinition],
