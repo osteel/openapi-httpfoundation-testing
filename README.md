@@ -49,7 +49,7 @@ use Osteel\OpenApi\Testing\ValidatorBuilder;
 Use the builder to create a [`\Osteel\OpenApi\Testing\Validator`](/src/Validator.php) object, using one of the available factory methods for YAML or JSON:
 
 ```php
-// From a file:
+// From a local file or URL:
 
 $validator = ValidatorBuilder::fromYamlFile($yamlFile)->getValidator();
 $validator = ValidatorBuilder::fromJsonFile($jsonFile)->getValidator();
