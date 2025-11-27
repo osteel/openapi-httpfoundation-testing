@@ -16,13 +16,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                    - foo
-                properties:
-                  foo:
-                    type: string
-                    example: bar
+                $ref: '#/components/schemas/Test'
     post:
       requestBody:
         content:
@@ -81,3 +75,14 @@ paths:
       responses:
         '204':
           description: No content
+
+components:
+  schemas:
+    Test:
+      type: object
+      required:
+        - foo
+      properties:
+        foo:
+          type: string
+          example: bar
