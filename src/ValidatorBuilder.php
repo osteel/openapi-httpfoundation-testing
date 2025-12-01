@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Osteel\OpenApi\Testing;
 
 use cebe\openapi\Reader;
+use cebe\openapi\ReferenceContext;
 use InvalidArgumentException;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder as BaseValidatorBuilder;
-use Osteel\OpenApi\Testing\Adapters\MessageAdapterInterface;
 use Osteel\OpenApi\Testing\Adapters\HttpFoundationAdapter;
+use Osteel\OpenApi\Testing\Adapters\MessageAdapterInterface;
 use Osteel\OpenApi\Testing\Cache\CacheAdapterInterface;
 use Osteel\OpenApi\Testing\Cache\Psr16Adapter;
 
@@ -34,9 +35,9 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromYaml(string $definition): ValidatorBuilderInterface
     {
-        $method = self::isUrl($definition) || is_file($definition) ? 'readFromYamlFile' : 'readFromYaml';
-
-        return self::fromMethod($method, $definition);
+        return self::isUrl($definition) || is_file($definition)
+            ? self::fromYamlFile($definition)
+            : self::fromYamlString($definition);
     }
 
     /**
@@ -46,9 +47,9 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromJson(string $definition): ValidatorBuilderInterface
     {
-        $method = self::isUrl($definition) || is_file($definition) ? 'readFromJsonFile' : 'readFromJson';
-
-        return self::fromMethod($method, $definition);
+        return self::isUrl($definition) || is_file($definition)
+            ? self::fromJsonFile($definition)
+            : self::fromJsonString($definition);
     }
 
     private static function isUrl(string $value): bool
@@ -89,7 +90,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromYamlString(string $definition): ValidatorBuilderInterface
     {
-        return self::fromMethod('readFromYaml', $definition);
+        return self::fromMethod('readFromYaml', $definition, resolveReferences: true);
     }
 
     /**
@@ -99,18 +100,22 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromJsonString(string $definition): ValidatorBuilderInterface
     {
-        return self::fromMethod('readFromJson', $definition);
+        return self::fromMethod('readFromJson', $definition, resolveReferences: true);
     }
 
     /**
      * Create a Validator object based on an OpenAPI definition.
      *
-     * @param string $method     the ValidatorBuilder object's method to use
-     * @param string $definition the OpenAPI definition
+     * @param string $method            the ValidatorBuilder object's method to use
+     * @param string $definition        the OpenAPI definition
+     * @param bool   $resolveReferences whether to resolve references in the definition
      */
-    private static function fromMethod(string $method, string $definition): ValidatorBuilderInterface
+    private static function fromMethod(string $method, string $definition, bool $resolveReferences = false): ValidatorBuilderInterface
     {
         $specObject = Reader::{$method}($definition);
+
+        $resolveReferences && $specObject->resolveReferences(new ReferenceContext($specObject, '/'));
+
         $builder = (new BaseValidatorBuilder())->fromSchema($specObject);
 
         return new ValidatorBuilder($builder);
