@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Osteel\OpenApi\Testing;
 
-use cebe\openapi\Reader;
-use cebe\openapi\ReferenceContext;
 use InvalidArgumentException;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder as BaseValidatorBuilder;
 use Osteel\OpenApi\Testing\Adapters\HttpFoundationAdapter;
 use Osteel\OpenApi\Testing\Adapters\MessageAdapterInterface;
 use Osteel\OpenApi\Testing\Cache\CacheAdapterInterface;
 use Osteel\OpenApi\Testing\Cache\Psr16Adapter;
+use RuntimeException;
 
 /**
  * This class creates Validator objects based on OpenAPI definitions.
@@ -35,9 +34,11 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromYaml(string $definition): ValidatorBuilderInterface
     {
-        return self::isUrl($definition) || is_file($definition)
-            ? self::fromYamlFile($definition)
-            : self::fromYamlString($definition);
+        return match (true) {
+            self::isUrl($definition) => self::fromYamlUrl($definition),
+            is_file($definition) => self::fromYamlFile($definition),
+            default => self::fromYamlString($definition),
+        };
     }
 
     /**
@@ -47,9 +48,11 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromJson(string $definition): ValidatorBuilderInterface
     {
-        return self::isUrl($definition) || is_file($definition)
-            ? self::fromJsonFile($definition)
-            : self::fromJsonString($definition);
+        return match (true) {
+            self::isUrl($definition) => self::fromJsonUrl($definition),
+            is_file($definition) => self::fromJsonFile($definition),
+            default => self::fromJsonString($definition),
+        };
     }
 
     private static function isUrl(string $value): bool
@@ -70,7 +73,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromYamlFile(string $definition): ValidatorBuilderInterface
     {
-        return self::fromMethod('readFromYamlFile', $definition);
+        return self::fromMethod('fromYamlFile', $definition);
     }
 
     /**
@@ -80,7 +83,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromJsonFile(string $definition): ValidatorBuilderInterface
     {
-        return self::fromMethod('readFromJsonFile', $definition);
+        return self::fromMethod('fromJsonFile', $definition);
     }
 
     /**
@@ -90,7 +93,7 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromYamlString(string $definition): ValidatorBuilderInterface
     {
-        return self::fromMethod('readFromYaml', $definition, resolveReferences: true);
+        return self::fromMethod('fromYaml', $definition);
     }
 
     /**
@@ -100,23 +103,59 @@ final class ValidatorBuilder implements ValidatorBuilderInterface
      */
     public static function fromJsonString(string $definition): ValidatorBuilderInterface
     {
-        return self::fromMethod('readFromJson', $definition, resolveReferences: true);
+        return self::fromMethod('fromJson', $definition);
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @param string $definition the OpenAPI definition's URL
+     *
+     * @throws InvalidArgumentException if the URL is invalid
+     * @throws RuntimeException         if the content of the URL cannot be read
+     */
+    public static function fromYamlUrl(string $definition): ValidatorBuilderInterface
+    {
+        return self::fromMethod('fromYaml', self::getUrlContent($definition));
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @param string $definition the OpenAPI definition's URL
+     *
+     * @throws InvalidArgumentException if the URL is invalid
+     * @throws RuntimeException         if the content of the URL cannot be read
+     */
+    public static function fromJsonUrl(string $definition): ValidatorBuilderInterface
+    {
+        return self::fromMethod('fromJson', self::getUrlContent($definition));
+    }
+
+    /**
+     * @throws InvalidArgumentException if the URL is invalid
+     * @throws RuntimeException         if the content of the URL cannot be read
+     */
+    private static function getUrlContent(string $url): string
+    {
+        self::isUrl($url) || throw new InvalidArgumentException(sprintf('Invalid URL: %s', $url));
+
+        if (($content = file_get_contents($url)) === false) {
+            throw new RuntimeException(sprintf('Failed to read URL %s', $url));
+        }
+
+        return $content;
     }
 
     /**
      * Create a Validator object based on an OpenAPI definition.
      *
-     * @param string $method            the ValidatorBuilder object's method to use
-     * @param string $definition        the OpenAPI definition
-     * @param bool   $resolveReferences whether to resolve references in the definition
+     * @param string $method     the ValidatorBuilder object's method to use
+     * @param string $definition the OpenAPI definition
      */
-    private static function fromMethod(string $method, string $definition, bool $resolveReferences = false): ValidatorBuilderInterface
+    private static function fromMethod(string $method, string $definition): ValidatorBuilderInterface
     {
-        $specObject = Reader::{$method}($definition);
-
-        $resolveReferences && $specObject->resolveReferences(new ReferenceContext($specObject, '/'));
-
-        $builder = (new BaseValidatorBuilder())->fromSchema($specObject);
+        $builder = (new BaseValidatorBuilder())->{$method}($definition);
 
         return new ValidatorBuilder($builder);
     }

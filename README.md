@@ -30,7 +30,7 @@ It converts HttpFoundation request and response objects to PSR-7 messages using 
 ## Installation
 
 > [!NOTE]
-> This package is mostly intended to be used as part of an API test suite.
+> This package supports PHP 8.0 and above.
 
 Via Composer:
 
@@ -39,6 +39,9 @@ composer require --dev osteel/openapi-httpfoundation-testing
 ```
 
 ## Usage
+
+> [!NOTE]
+> This package is mostly intended to be used as part of an API test suite.
 
 Import the builder class:
 
@@ -49,7 +52,7 @@ use Osteel\OpenApi\Testing\ValidatorBuilder;
 Use the builder to create a [`\Osteel\OpenApi\Testing\Validator`](/src/Validator.php) object, using one of the available factory methods for YAML or JSON:
 
 ```php
-// From a local file or URL:
+// From a local file:
 
 $validator = ValidatorBuilder::fromYamlFile($yamlFile)->getValidator();
 $validator = ValidatorBuilder::fromJsonFile($jsonFile)->getValidator();
@@ -59,10 +62,15 @@ $validator = ValidatorBuilder::fromJsonFile($jsonFile)->getValidator();
 $validator = ValidatorBuilder::fromYamlString($yamlString)->getValidator();
 $validator = ValidatorBuilder::fromJsonString($jsonString)->getValidator();
 
+// From a URL:
+
+$validator = ValidatorBuilder::fromYamlUrl($yamlUrl)->getValidator();
+$validator = ValidatorBuilder::fromJsonUrl($jsonUrl)->getValidator();
+
 // Automatic detection (slower):
 
-$validator = ValidatorBuilder::fromYaml($yamlFileOrString)->getValidator();
-$validator = ValidatorBuilder::fromJson($jsonFileOrString)->getValidator();
+$validator = ValidatorBuilder::fromYaml($yamlFileOrStringOrUrl)->getValidator();
+$validator = ValidatorBuilder::fromJson($jsonFileOrStringOrUrl)->getValidator();
 ```
 
 > [!TIP]
