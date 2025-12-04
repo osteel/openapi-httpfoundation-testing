@@ -9,6 +9,7 @@ use Osteel\OpenApi\Testing\Adapters\MessageAdapterInterface;
 use Osteel\OpenApi\Testing\Cache\CacheAdapterInterface;
 use Osteel\OpenApi\Testing\Validator;
 use Osteel\OpenApi\Testing\ValidatorBuilder;
+use Psr\SimpleCache\CacheInterface;
 use stdClass;
 
 class ValidatorBuilderTest extends TestCase
@@ -17,17 +18,17 @@ class ValidatorBuilderTest extends TestCase
     {
         return [
             ['fromYaml', self::$yamlDefinition],
-            ['fromYaml', 'https://raw.githubusercontent.com/osteel/openapi-httpfoundation-testing/refs/heads/main/tests/stubs/example.yaml'],
             ['fromYaml', file_get_contents(self::$yamlDefinition)],
+            ['fromYaml', 'https://raw.githubusercontent.com/osteel/openapi-httpfoundation-testing/refs/heads/main/tests/stubs/example.yaml'],
             ['fromYamlFile', self::$yamlDefinition],
-            ['fromYamlFile', 'https://raw.githubusercontent.com/osteel/openapi-httpfoundation-testing/refs/heads/main/tests/stubs/example.yaml'],
             ['fromYamlString', file_get_contents(self::$yamlDefinition)],
+            ['fromYamlUrl', 'https://raw.githubusercontent.com/osteel/openapi-httpfoundation-testing/refs/heads/main/tests/stubs/example.yaml'],
             ['fromJson', self::$jsonDefinition],
-            ['fromJson', 'https://raw.githubusercontent.com/osteel/openapi-httpfoundation-testing/refs/heads/main/tests/stubs/example.json'],
             ['fromJson', file_get_contents(self::$jsonDefinition)],
+            ['fromJson', 'https://raw.githubusercontent.com/osteel/openapi-httpfoundation-testing/refs/heads/main/tests/stubs/example.json'],
             ['fromJsonFile', self::$jsonDefinition],
-            ['fromJsonFile', 'https://raw.githubusercontent.com/osteel/openapi-httpfoundation-testing/refs/heads/main/tests/stubs/example.json'],
             ['fromJsonString', file_get_contents(self::$jsonDefinition)],
+            ['fromJsonUrl', 'https://raw.githubusercontent.com/osteel/openapi-httpfoundation-testing/refs/heads/main/tests/stubs/example.json'],
         ];
     }
 
@@ -46,7 +47,15 @@ class ValidatorBuilderTest extends TestCase
         $this->assertTrue($result->get($response, static::PATH));
     }
 
-    public function test_it_does_not_set_the_adapter_because_its_type_is_invalid()
+    /** @dataProvider definitionProvider */
+    public function test_it_sets_the_cache(string $method, string $definition)
+    {
+        ValidatorBuilder::$method($definition)->setCache($this->createMock(CacheInterface::class))->getValidator();
+
+        $this->addToAssertionCount(1);
+    }
+
+    public function test_it_does_not_set_the_message_adapter_because_its_type_is_invalid()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(sprintf(
@@ -58,7 +67,7 @@ class ValidatorBuilderTest extends TestCase
         ValidatorBuilder::fromYaml(self::$yamlDefinition)->setMessageAdapter(stdClass::class);
     }
 
-    public function test_it_sets_the_adapter()
+    public function test_it_sets_the_message_adapter()
     {
         ValidatorBuilder::fromYaml(self::$yamlDefinition)
             ->setMessageAdapter($this->createMock(MessageAdapterInterface::class)::class);
