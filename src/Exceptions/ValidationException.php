@@ -20,7 +20,9 @@ class ValidationException extends Exception
             $message .= sprintf(': %s', $exception->getMessage());
 
             if ($exception instanceof SchemaMismatch && ! empty($breadCrumb = $exception->dataBreadCrumb())) {
-                $message .= sprintf(' Field: %s', implode('.', $breadCrumb->buildChain()));
+                $chain = array_map('strval', array_filter($breadCrumb->buildChain(), 'is_scalar'));
+
+                $message .= sprintf(' Field: %s', implode('.', $chain));
             }
         }
 
